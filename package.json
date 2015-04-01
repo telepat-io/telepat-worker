@@ -1,0 +1,20 @@
+{
+  "name": "octopus-worker",
+  "version": "0.0.1",
+  "description": "Worker for consuming tasks from the octopus api through the kafka server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://freshweb.ro:7990/scm/bel/octopus-worker.git"
+  },
+  "keywords": [
+    "octopus",
+    "worker",
+    "kafka"
+  ],
+  "author": "Razvan Botea <razvan@appscend.com>",
+  "license": "GPLv3"
+}
