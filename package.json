@@ -16,5 +16,12 @@
     "kafka"
   ],
   "author": "Razvan Botea <razvan@appscend.com>",
-  "license": "GPLv3"
+  "license": "GPLv3",
+  "dependencies": {
+    "async": "^0.9.0",
+    "couchbase": "^2.0.6",
+    "electron": "^0.4.1",
+    "kafka-node": "^0.2.25",
+    "private-repo": "git+http://freshweb.ro:7990/scm/bel/octopus-models-lib.git#develop"
+  }
 }

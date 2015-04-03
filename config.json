@@ -1,0 +1,13 @@
+{
+  "couchbase": {
+    "host": "blg-couch.cloudapp.net",
+    "dataBucket": "default",
+    "stateBucket": "state"
+  },
+  "kafka": {
+    "host": "blg-kafka.cloudapp.net",
+    "port": 2181,
+    "consumerName": "octopus-consumer",
+    "producerName": "octopus-producer"
+  }
+}
