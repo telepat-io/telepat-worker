@@ -17,6 +17,7 @@ Models.Model._spec = Models.getModels();
 var topics = ['aggregation', 'write', 'track'];
 
 var Aggregator = require('./lib/aggregator');
+var Writer = require('./lib/writer');
 
 var topic = args.params.t;
 var consumerIndex = args.params.i;
@@ -32,14 +33,21 @@ var kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', 
 kafkaConsumer = new kafka.HighLevelConsumer(kafkaClient, [{topic: topic}], {groupId: topic});
 kafkaProducer = new kafka.HighLevelProducer(kafkaClient);
 
-function close(error) {
-    console.log(error);
-    kafkaConsumer.close(true, function() {
+/*function close() {
+    kafkaClient.close(true, function() {
         process.exit(-1);
     });
-}
+}*/
 
-process.on('beforeExit', close);
+process.on('SIGUSR2', function() {
+    bucket.disconnect();
+    stateBucket.disconnect();
+    kafkaClient.close(function() {
+        process.exit(-1);
+    });
+});
+
+//process.on('beforeExit', close);
 //process.on('uncaughtException', close);
 
 kafkaConsumer.on('error', function(err) {
@@ -51,6 +59,8 @@ formKeys = function(mdl, context, user_id, parent) {
     var userItemsChannelKey = null;
     var allChildItemsChannelKey = null;
     var userChildItemsChannelKey = null;
+
+    console.log(parent);
 
     if (user_id)
         userItemsChannelKey = allItemsChannelKey+':users:'+user_id;
@@ -84,6 +94,7 @@ bucket.on('connect', function() {
             }
 
             case 'write': {
+                Writer(msgValue);
 
                 break;
             }
