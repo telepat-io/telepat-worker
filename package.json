@@ -22,6 +22,7 @@
     "couchbase": "^2.0.6",
     "electron": "^0.4.1",
     "kafka-node": "^0.2.25",
-    "private-repo": "git+http://freshweb.ro:7990/scm/bel/octopus-models-lib.git#develop"
+    "private-repo": "git+http://freshweb.ro:7990/scm/bel/octopus-models-lib.git#develop",
+    "uuid": "^2.0.1"
   }
 }

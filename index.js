@@ -1,17 +1,18 @@
 var args = require('electron').argv();
 var cb = require('couchbase');
 var kafka = require('kafka-node');
+var async = require('async');
 
 var Models = require('octopus-models-api');
 
 var config = require('./config.json');
 
 var cluster = new cb.Cluster('couchbase://'+config.couchbase.host);
-bucket = cluster.openBucket(config.couchbase.dataBucket);
-stateBucket = cluster.openBucket(config.couchbase.stateBucket);
 
-Models.Application.setBucket(bucket);
-Models.Application.setStateBucket(stateBucket);
+bucket = null;
+stateBucket = null;
+opIdentifiersBucket = null;
+
 Models.Model._spec = Models.getModels();
 
 var topics = ['aggregation', 'write', 'track'];
@@ -40,11 +41,32 @@ kafkaProducer = new kafka.HighLevelProducer(kafkaClient);
 }*/
 
 process.on('SIGUSR2', function() {
+    console.log('SIGUSR2');
     bucket.disconnect();
     stateBucket.disconnect();
+    opIdentifiersBucket.disconnect();
+    kafkaClient.close();
+});
+
+process.on('SIGTERM', function() {
+    console.log('SIGTERM');
+    bucket.disconnect();
+    stateBucket.disconnect();
+    opIdentifiersBucket.disconnect();
     kafkaClient.close(function() {
         process.exit(-1);
     });
+});
+
+process.on('exit', function() {
+    console.log('EXIT');
+    if (bucket)
+        bucket.disconnect();
+    if (stateBucket)
+        stateBucket.disconnect();
+    if (opIdentifiersBucket)
+        opIdentifiersBucket.disconnect();
+    kafkaClient.close();
 });
 
 //process.on('beforeExit', close);
@@ -52,6 +74,10 @@ process.on('SIGUSR2', function() {
 
 kafkaConsumer.on('error', function(err) {
     console.log(err);
+    bucket.disconnect();
+    stateBucket.disconnect();
+    opIdentifiersBucket.disconnect();
+    process.exit(-1);
 });
 
 formKeys = function(mdl, context, user_id, parent) {
@@ -59,8 +85,6 @@ formKeys = function(mdl, context, user_id, parent) {
     var userItemsChannelKey = null;
     var allChildItemsChannelKey = null;
     var userChildItemsChannelKey = null;
-
-    console.log(parent);
 
     if (user_id)
         userItemsChannelKey = allItemsChannelKey+':users:'+user_id;
@@ -80,7 +104,42 @@ formKeys = function(mdl, context, user_id, parent) {
     return [allItemsChannelKey, userItemsChannelKey, allChildItemsChannelKey, userChildItemsChannelKey];
 };
 
-bucket.on('connect', function() {
+async.series([
+    function(callback) {
+        bucket = cluster.openBucket(config.couchbase.dataBucket);
+        bucket.nodeConnectionTimeout = 10000;
+        bucket.on('connect', callback);
+        bucket.on('error', function(err) {
+            console.log('Data bucket error: ', err);
+            bucket.disconnect();
+            process.exit(-1);
+        });
+    },
+    function (callback) {
+        stateBucket = cluster.openBucket(config.couchbase.stateBucket);
+        stateBucket.nodeConnectionTimeout = 10000;
+        stateBucket.on('connect', callback);
+        stateBucket.on('error', function(err) {
+            console.log('State bucket error: ', err);
+            bucket.disconnect();
+            process.exit(-1);
+        });
+    },
+    function (callback) {
+        opIdentifiersBucket = cluster.openBucket(config.couchbase.opIdentifierBucket);
+        opIdentifiersBucket.nodeConnectionTimeout = 10000;
+        opIdentifiersBucket.on('connect', callback);
+        opIdentifiersBucket.on('error', function(err) {
+            console.log('Op identifiers bucket error: ', err);
+            bucket.disconnect();
+            stateBucket.disconnect();
+            process.exit(-1);
+        });
+    }
+], function(err) {
+    Models.Application.setBucket(bucket);
+    Models.Application.setStateBucket(stateBucket);
+
     kafkaConsumer.on('message', function(message) {
         console.log(message.value);
 
@@ -100,8 +159,4 @@ bucket.on('connect', function() {
             }
         }
     });
-});
-
-bucket.on('error', function(err) {
-    console.log(err);
 });
