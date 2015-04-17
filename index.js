@@ -2,6 +2,7 @@ var args = require('electron').argv();
 var cb = require('couchbase');
 var kafka = require('kafka-node');
 var async = require('async');
+var sizeof = require('object-sizeof');
 
 var Models = require('octopus-models-api');
 
@@ -145,18 +146,30 @@ async.series([
 
         var msgValue = JSON.parse(message.value);
 
-        switch(topic) {
-            case 'aggregation': {
-                Aggregator(msgValue);
+        var functionSwitch = function() {
+            switch(topic) {
+                case 'aggregation': {
+                    Aggregator(msgValue);
 
-                break;
+                    break;
+                }
+
+                case 'write': {
+                    Writer(msgValue);
+
+                    break;
+                }
             }
+        };
 
-            case 'write': {
-                Writer(msgValue);
-
-                break;
-            }
+        if (sizeof(Models.Application.loadedAppModels) > (1 << 26)) {
+            delete Models.Application.loadedAppModels;
+            Models.Application.loadedAppModels = {};
         }
+
+        if (!Models.Application.loadedAppModels[msgValue.applicationId]) {
+            Models.Application.loadAppModels(msgValue.applicationId, functionSwitch);
+        } else
+            functionSwitch();
     });
 });

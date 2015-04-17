@@ -25,6 +25,7 @@
     "kafka-node": "^0.2.25",
     "mandrill-api": "^1.0.41",
     "node-gcm-service": "^0.2.8",
+    "object-sizeof": "^1.0.4",
     "private-repo": "git+http://freshweb.ro:7990/scm/bel/octopus-models-lib.git#develop",
     "uuid": "^2.0.1"
   }
