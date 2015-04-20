@@ -14,12 +14,11 @@ bucket = null;
 stateBucket = null;
 opIdentifiersBucket = null;
 
-Models.Model._spec = Models.getModels();
-
-var topics = ['aggregation', 'write', 'track'];
+var topics = ['aggregation', 'write', 'track', 'update_friends'];
 
 var Aggregator = require('./lib/aggregator');
 var Writer = require('./lib/writer');
+var UpdateFriends = require('./lib/update_friends');
 
 var topic = args.params.t;
 var consumerIndex = args.params.i;
@@ -156,6 +155,12 @@ async.series([
 
                 case 'write': {
                     Writer(msgValue);
+
+                    break;
+                }
+
+                case 'update_friends': {
+					UpdateFriends(msgValue);
 
                     break;
                 }
