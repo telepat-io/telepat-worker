@@ -80,8 +80,8 @@ kafkaConsumer.on('error', function(err) {
     process.exit(-1);
 });
 
-formKeys = function(mdl, context, user_id, parent) {
-    var allItemsChannelKey = 'blg:'+context+':'+Models.Application.loadedAppModels[mdl].namespace;
+formKeys = function(appId, mdl, context, user_id, parent) {
+    var allItemsChannelKey = 'blg:'+context+':'+Models.Application.loadedAppModels[appId][mdl].namespace;
     var userItemsChannelKey = null;
     var allChildItemsChannelKey = null;
     var userChildItemsChannelKey = null;
@@ -89,9 +89,9 @@ formKeys = function(mdl, context, user_id, parent) {
     if (user_id)
         userItemsChannelKey = allItemsChannelKey+':users:'+user_id;
     if (parent)
-        allChildItemsChannelKey = allItemsChannelKey+':'+Models.Application.loadedAppModels[parent.model].namespace+':'+parent.id;
+        allChildItemsChannelKey = allItemsChannelKey+':'+Models.Application.loadedAppModels[appId][parent.model].namespace+':'+parent.id;
     if (user_id && parent)
-        userChildItemsChannelKey = userItemsChannelKey+':'+Models.Application.loadedAppModels[parent.model].namespace+':'+parent.id;
+        userChildItemsChannelKey = userItemsChannelKey+':'+Models.Application.loadedAppModels[appId][parent.model].namespace+':'+parent.id;
 
     allItemsChannelKey += ':deltas';
     if (userItemsChannelKey)
