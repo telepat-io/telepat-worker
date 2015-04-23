@@ -80,11 +80,12 @@ kafkaConsumer.on('error', function(err) {
     process.exit(-1);
 });
 
-formKeys = function(appId, mdl, context, user_id, parent) {
+formKeys = function(appId, mdl, context, user_id, parent, id) {
     var allItemsChannelKey = 'blg:'+context+':'+Models.Application.loadedAppModels[appId][mdl].namespace;
     var userItemsChannelKey = null;
     var allChildItemsChannelKey = null;
     var userChildItemsChannelKey = null;
+	var singleItemChannelKey = null;
 
     if (user_id)
         userItemsChannelKey = allItemsChannelKey+':users:'+user_id;
@@ -100,8 +101,10 @@ formKeys = function(appId, mdl, context, user_id, parent) {
         allChildItemsChannelKey += ':deltas';
     if (userChildItemsChannelKey)
         userChildItemsChannelKey+= ':deltas';
+	if (id)
+		singleItemChannelKey = 'blg:'+Models.Application.loadedAppModels[appId][mdl].namespace+':'+id+':deltas';
 
-    return [allItemsChannelKey, userItemsChannelKey, allChildItemsChannelKey, userChildItemsChannelKey];
+    return [allItemsChannelKey, userItemsChannelKey, allChildItemsChannelKey, userChildItemsChannelKey, singleItemChannelKey];
 };
 
 async.series([
