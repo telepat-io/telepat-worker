@@ -27,6 +27,7 @@
     "node-gcm-service": "^0.2.8",
     "object-sizeof": "^1.0.4",
     "private-repo": "git+http://freshweb.ro:7990/scm/bel/octopus-models-lib.git#develop",
+    "socket.io": "^1.3.5",
     "uuid": "^2.0.1"
   }
 }

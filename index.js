@@ -23,8 +23,8 @@ var UpdateFriends = require('./lib/update_friends');
 var topic = args.params.t;
 var consumerIndex = args.params.i;
 
-if (topics.indexOf(topic) === -1) {
-    console.error('Topic must be one of '+topics.toString());
+if (topics.indexOf(topic) === -1 && topic.slice(-9) !== 'transport') {
+    console.error('Topic must be one of '+topics.toString()+' or a transport topic.');
     process.exit(-1);
 }
 
@@ -79,6 +79,8 @@ kafkaConsumer.on('error', function(err) {
     opIdentifiersBucket.disconnect();
     process.exit(-1);
 });
+
+var transport = null;
 
 formKeys = function(appId, mdl, context, user_id, parent, id) {
     var allItemsChannelKey = 'blg:'+context+':'+Models.Application.loadedAppModels[appId][mdl].namespace;
@@ -143,7 +145,26 @@ async.series([
     Models.Application.setBucket(bucket);
     Models.Application.setStateBucket(stateBucket);
 
-    kafkaConsumer.on('message', function(message) {
+	var topicParts = topic.split('_');
+	if (topicParts[1] === 'transport') {
+		var transportType = topicParts[0];
+		try {
+			transport = require('./lib/client_transport/' + transportType);
+
+			if (transport.initialize) {
+				transport.initialize();
+			}
+
+		} catch (e) {
+			if (e.code == 'MODULE_NOT_FOUND') {
+				console.error('Transport topic "'+topic+'" is not a valid transport type.');
+				process.exit(-1);
+			} else
+				throw e;
+		}
+	}
+
+	kafkaConsumer.on('message', function(message) {
         console.log(message.value);
 
         var msgValue = JSON.parse(message.value);
@@ -167,6 +188,13 @@ async.series([
 
                     break;
                 }
+
+				default: {
+					var topicParts = topic.split('_');
+					if (topicParts[1] === 'transport') {
+						transport.Send(msgValue);
+					}
+				}
             }
         };
 
