@@ -12,6 +12,9 @@ var cluster = new cb.Cluster('couchbase://'+config.couchbase.host);
 
 bucket = null;
 stateBucket = null;
+/*	this bucket is used to uniquely identify an operation (create/read/update/delete) so the writer doesn't
+	perform the same operation multiple times
+ */
 opIdentifiersBucket = null;
 
 var topics = ['aggregation', 'write', 'track', 'update_friends'];
@@ -33,12 +36,6 @@ process.title = config.kafka.clientName+'-'+topic+'-'+consumerIndex;
 var kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'-'+topic+'-'+consumerIndex);
 kafkaConsumer = new kafka.HighLevelConsumer(kafkaClient, [{topic: topic}], {groupId: topic});
 kafkaProducer = new kafka.HighLevelProducer(kafkaClient);
-
-/*function close() {
-    kafkaClient.close(true, function() {
-        process.exit(-1);
-    });
-}*/
 
 process.on('SIGUSR2', function() {
     console.log('SIGUSR2');
@@ -69,9 +66,6 @@ process.on('exit', function() {
     kafkaClient.close();
 });
 
-//process.on('beforeExit', close);
-//process.on('uncaughtException', close);
-
 kafkaConsumer.on('error', function(err) {
     console.log(err);
     bucket.disconnect();
@@ -82,6 +76,16 @@ kafkaConsumer.on('error', function(err) {
 
 var transport = null;
 
+/**
+ * Forms the key of a subscription document (only for simple filters)
+ * @param appId integer Application ID
+ * @param mdl string Model name of the subscription
+ * @param context integer Context ID
+ * @param [user_id] integer User ID of the subscribed channel
+ * @param [parent] Object Contains model and id of the parent of the subscribed channel item
+ * @param [id] integer ID of the subscribed item
+ * @returns string[] 5 Subscription keys (some of them but not all may be null).
+ */
 formKeys = function(appId, mdl, context, user_id, parent, id) {
     var allItemsChannelKey = 'blg:'+context+':'+Models.Application.loadedAppModels[appId][mdl].namespace;
     var userItemsChannelKey = null;
@@ -109,6 +113,7 @@ formKeys = function(appId, mdl, context, user_id, parent, id) {
     return [allItemsChannelKey, userItemsChannelKey, allChildItemsChannelKey, userChildItemsChannelKey, singleItemChannelKey];
 };
 
+//Open connections to databases
 async.series([
     function(callback) {
         bucket = cluster.openBucket(config.couchbase.dataBucket);
@@ -164,39 +169,39 @@ async.series([
 		}
 	}
 
+	var functionSwitch = function() {
+		switch(topic) {
+			case 'aggregation': {
+				Aggregator(msgValue);
+
+				break;
+			}
+
+			case 'write': {
+				Writer(msgValue);
+
+				break;
+			}
+
+			case 'update_friends': {
+				UpdateFriends(msgValue);
+
+				break;
+			}
+
+			default: {
+				var topicParts = topic.split('_');
+				if (topicParts[1] === 'transport') {
+					transport.Send(msgValue);
+				}
+			}
+		}
+	};
+
 	kafkaConsumer.on('message', function(message) {
         console.log(message.value);
 
         var msgValue = JSON.parse(message.value);
-
-        var functionSwitch = function() {
-            switch(topic) {
-                case 'aggregation': {
-                    Aggregator(msgValue);
-
-                    break;
-                }
-
-                case 'write': {
-                    Writer(msgValue);
-
-                    break;
-                }
-
-                case 'update_friends': {
-					UpdateFriends(msgValue);
-
-                    break;
-                }
-
-				default: {
-					var topicParts = topic.split('_');
-					if (topicParts[1] === 'transport') {
-						transport.Send(msgValue);
-					}
-				}
-            }
-        };
 
         if (sizeof(Models.Application.loadedAppModels) > (1 << 26)) {
             delete Models.Application.loadedAppModels;
