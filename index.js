@@ -23,8 +23,7 @@ if (process.env.TP_KFK_HOST) {
 	config.kafka = {
 		host: process.env.TP_KFK_HOST,
 		port: process.env.TP_KFK_PORT,
-		consumerName: process.env.TP_KFK_CONSUMER,
-		producerName: process.env.TP_KFK_PRODUCER
+		clientName: process.env.TP_KFK_CLIENT
 	};
 } else {
 	config.couchbase = require('./config.json').kafka;
