@@ -6,7 +6,29 @@ var sizeof = require('object-sizeof');
 
 var Models = require('octopus-models-api');
 
-var config = require('./config.json');
+var config = {};//require('./config.json');
+
+if (process.env.TP_CB_HOST) {
+	config.couchbase = {
+		host: TP_CB_HOST,
+		dataBucket: TP_CB_BUCKET,
+		stateBucket: TP_CB_STATE_BUCKET,
+		opIdentifiersBucket: TP_CB_OPIDENTIFIERS_BUCKET
+	};
+} else {
+	config.couchbase = require('./config.json').couchbase;
+}
+
+if (process.env.TP_KFK_HOST) {
+	config.kafka = {
+		host: process.env.TP_KFK_HOST,
+		port: process.env.TP_KFK_PORT,
+		consumerName: process.env.TP_KFK_CONSUMER,
+		producerName: process.env.TP_KFK_PRODUCER
+	};
+} else {
+	config.couchbase = require('./config.json').kafka;
+}
 
 var cluster = new cb.Cluster('couchbase://'+config.couchbase.host);
 
