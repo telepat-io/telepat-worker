@@ -190,7 +190,7 @@ async.series([
 		}
 	}
 
-	var functionSwitch = function() {
+	var functionSwitch = function(msgValue) {
 		switch(topic) {
 			case 'aggregation': {
 				Aggregator(msgValue);
@@ -230,8 +230,10 @@ async.series([
         }
 
         if (!Models.Application.loadedAppModels[msgValue.applicationId]) {
-            Models.Application.loadAppModels(msgValue.applicationId, functionSwitch);
+            Models.Application.loadAppModels(msgValue.applicationId, function() {
+				functionSwitch(msgValue);
+			});
         } else
-            functionSwitch();
+            functionSwitch(msgValue);
     });
 });
