@@ -26,7 +26,7 @@ if (process.env.TP_KFK_HOST) {
 		clientName: process.env.TP_KFK_CLIENT
 	};
 } else {
-	config.couchbase = require('./config.json').kafka;
+	config.kafka = require('./config.json').kafka;
 }
 
 var cluster = new cb.Cluster('couchbase://'+config.couchbase.host);
