@@ -10,10 +10,10 @@ var config = {};//require('./config.json');
 
 if (process.env.TP_CB_HOST) {
 	config.couchbase = {
-		host: TP_CB_HOST,
-		dataBucket: TP_CB_BUCKET,
-		stateBucket: TP_CB_STATE_BUCKET,
-		opIdentifiersBucket: TP_CB_OPIDENTIFIERS_BUCKET
+		host: process.env.TP_CB_HOST,
+		dataBucket: process.env.TP_CB_BUCKET,
+		stateBucket: process.env.TP_CB_STATE_BUCKET,
+		opIdentifiersBucket: process.env.TP_CB_OPIDENTIFIERS_BUCKET
 	};
 } else {
 	config.couchbase = require('./config.json').couchbase;
