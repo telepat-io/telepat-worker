@@ -1,4 +1,4 @@
-var args = require('electron').argv();
+ args = require('electron').argv();
 var cb = require('couchbase');
 var kafka = require('kafka-node');
 var async = require('async');
@@ -100,19 +100,27 @@ var transport = null;
 /**
  * Forms the key of a subscription document (only for simple filters)
  * @param appId integer Application ID
- * @param mdl string Model name of the subscription
- * @param context integer Context ID
- * @param [user_id] integer User ID of the subscribed channel
- * @param [parent] Object Contains model and id of the parent of the subscribed channel item
- * @param [id] integer ID of the subscribed item
+ * @param item Object Item
  * @returns string[] 5 Subscription keys (some of them but not all may be null).
  */
-formKeys = function(appId, mdl, context, user_id, parent, id) {
-    var allItemsChannelKey = 'blg:'+context+':'+Models.Application.loadedAppModels[appId][mdl].namespace;
+formKeys = function(appId, item, callback) {
+	var mdl = item.type;
+	var user_id = item.user_id;
+	var id = item.id;
+
+	for (var r in Models.Application.loadedAppModels[message.applicationId][mdl].belongsTo) {
+		if (item[Models.Application.loadedAppModels[message.applicationId][mdl].belongsTo[r].parentModel+'_id']) {
+			var parent = {model: Models.Application.loadedAppModels[message.applicationId][mdl].belongsTo[r].parentModel,
+				id: item[Models.Application.loadedAppModels[message.applicationId][mdl].belongsTo[r].parentModel+'_id']};
+		}
+	}
+
+	var allItemsChannelKey = 'blg:'+context+':'+Models.Application.loadedAppModels[appId][mdl].namespace;
     var userItemsChannelKey = null;
     var allChildItemsChannelKey = null;
     var userChildItemsChannelKey = null;
 	var singleItemChannelKey = null;
+	var result = [];
 
     if (user_id)
         userItemsChannelKey = allItemsChannelKey+':users:'+user_id;
@@ -120,6 +128,10 @@ formKeys = function(appId, mdl, context, user_id, parent, id) {
         allChildItemsChannelKey = allItemsChannelKey+':'+Models.Application.loadedAppModels[appId][parent.model].namespace+':'+parent.id;
     if (user_id && parent)
         userChildItemsChannelKey = userItemsChannelKey+':'+Models.Application.loadedAppModels[appId][parent.model].namespace+':'+parent.id;
+	if (id)
+		singleItemChannelKey = 'blg:'+Models.Application.loadedAppModels[appId][mdl].namespace+':'+id+':deltas';
+
+	var partialKeys = [allItemsChannelKey, userItemsChannelKey, allChildItemsChannelKey, userChildItemsChannelKey, singleItemChannelKey];
 
     allItemsChannelKey += ':deltas';
     if (userItemsChannelKey)
@@ -129,9 +141,27 @@ formKeys = function(appId, mdl, context, user_id, parent, id) {
     if (userChildItemsChannelKey)
         userChildItemsChannelKey+= ':deltas';
 	if (id)
-		singleItemChannelKey = 'blg:'+Models.Application.loadedAppModels[appId][mdl].namespace+':'+id+':deltas';
+		singleItemChannelKey += ':deltas';
 
-    return [allItemsChannelKey, userItemsChannelKey, allChildItemsChannelKey, userChildItemsChannelKey, singleItemChannelKey];
+	result = [allItemsChannelKey, userItemsChannelKey, allChildItemsChannelKey, userChildItemsChannelKey, singleItemChannelKey];
+
+	async.each(partialKeys, function(key, c) {
+		if(key) {
+			var query = stateBucket.ViewQuery.from('dev_state_document', 'by_subscription').custom({stale: false, key: '"'+key+'"'});
+			stateBucket.query(query, function(err, results) {
+				for(var k in results) {
+					var queryObject = JSON.parse((new Buffer(results[k].value)).toString('ascii'));
+
+					if (Models.utils.testObject(item, queryObject))
+						result.push(k+':deltas');
+				}
+				c();
+			});
+		}
+	}, function(err) {
+		if (err) return callback(err);
+		callback(null, result);
+	});
 };
 
 //Open connections to databases
