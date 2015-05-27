@@ -55,8 +55,8 @@ if (topics.indexOf(topic) === -1 && topic.slice(-9) !== 'transport') {
 process.title = config.kafka.clientName+'-'+topic+'-'+consumerIndex;
 
 var kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'-'+topic+'-'+consumerIndex);
-kafkaConsumer = new kafka.HighLevelConsumer(kafkaClient, [{topic: topic}], {groupId: topic});
-kafkaProducer = new kafka.HighLevelProducer(kafkaClient);
+kafkaProducer = null;
+kafkaConsumer = null;
 
 process.on('SIGUSR2', function() {
     console.log('SIGUSR2');
@@ -85,14 +85,6 @@ process.on('exit', function() {
     if (opIdentifiersBucket)
         opIdentifiersBucket.disconnect();
     kafkaClient.close();
-});
-
-kafkaConsumer.on('error', function(err) {
-    console.log(err);
-    bucket.disconnect();
-    stateBucket.disconnect();
-    opIdentifiersBucket.disconnect();
-    process.exit(-1);
 });
 
 var transport = null;
@@ -166,37 +158,99 @@ formKeys = function(appId, item, callback) {
 
 //Open connections to databases
 async.series([
-    function(callback) {
-        bucket = cluster.openBucket(config.couchbase.dataBucket);
-        bucket.nodeConnectionTimeout = 10000;
-        bucket.on('connect', callback);
+    function DataBucket(callback) {
+        if (bucket)
+			bucket = null;
+
+		bucket = cluster.openBucket(config.couchbase.dataBucket);
         bucket.on('error', function(err) {
-            console.log('Data bucket error: ', err);
-            bucket.disconnect();
-            process.exit(-1);
+			console.log('Failed connecting to Data Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
+			console.log('Retrying...');
+			setTimeout(function () {
+				DataBucket(callback);
+			}, 1000);
         });
+		bucket.on('connect', function() {
+			console.log('Connected to Data bucket on couchbase.');
+			callback();
+		});
     },
-    function (callback) {
-        stateBucket = cluster.openBucket(config.couchbase.stateBucket);
-        stateBucket.nodeConnectionTimeout = 10000;
-        stateBucket.on('connect', callback);
+    function StateBucket(callback) {
+		if (stateBucket)
+			stateBucket = null;
+
+		stateBucket = cluster.openBucket(config.couchbase.stateBucket);
         stateBucket.on('error', function(err) {
-            console.log('State bucket error: ', err);
-            bucket.disconnect();
-            process.exit(-1);
+			console.log('Failed connecting to State Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
+			console.log('Retrying...');
+			setTimeout(function () {
+				StateBucket(callback);
+			}, 1000);
         });
+		stateBucket.on('connect', function() {
+			console.log('Connected to State bucket on couchbase.');
+			callback();
+		});
     },
-    function (callback) {
-        opIdentifiersBucket = cluster.openBucket(config.couchbase.opIdentifierBucket);
-        opIdentifiersBucket.nodeConnectionTimeout = 10000;
-        opIdentifiersBucket.on('connect', callback);
+    function OpIdentifiersBucket(callback) {
+		if(opIdentifiersBucket)
+			delete opIdentifiersBucket;
+
+		opIdentifiersBucket = cluster.openBucket(config.couchbase.opIdentifierBucket);
         opIdentifiersBucket.on('error', function(err) {
-            console.log('Op identifiers bucket error: ', err);
-            bucket.disconnect();
-            stateBucket.disconnect();
-            process.exit(-1);
+			console.log('Failed connecting to Op Identifiers Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
+			console.log('Retrying...');
+			setTimeout(function () {
+				OpIdentifiersBucket(callback);
+			}, 1000);
         });
-    }
+		opIdentifiersBucket.on('connect', function() {
+			console.log('Connected to Op Identifiers bucket on couchbase.');
+			callback();
+		});
+    },
+	function KafkaProducer(callback) {
+		if (kafkaProducer)
+			kafkaProducer = null;
+
+		kafkaProducer = new kafka.HighLevelProducer(kafkaClient);
+
+		kafkaProducer.on('error', function(err) {
+			console.log('Failed connecting to Kafka "'+config.kafka.host+'": '+err.message);
+			console.log('Retrying...');
+			setTimeout(function () {
+				KafkaProducer(callback);
+			}, 1000);
+		});
+
+		kafkaProducer.on('ready', function() {
+			console.log('Producer connected to Kafka.');
+			callback();
+		});
+		console.log('kafka producer');
+	},
+	function KafkaConsumer(callback) {
+		if (kafkaConsumer)
+			kafkaConsumer = null;
+
+		kafkaConsumer = new kafka.HighLevelConsumer(kafkaClient, [{topic: topic}], {groupId: topic});
+		kafkaConsumer.on('error', function(err) {
+			console.log('Failed connecting to Kafka "'+config.kafka.host+'": '+err.message);
+			console.log('Retrying...');
+			setTimeout(function () {
+				KafkaConsumer(callback);
+			}, 1000);
+		});
+
+		kafkaClient.on('connected', function() {
+			console.log('Consumer connected to Kafka.');
+			callback();
+		});
+
+		kafkaClient.on('disconnected', function() {
+			console.log('Disconnected');
+		});
+	}
 ], function(err) {
     Models.Application.setBucket(bucket);
     Models.Application.setStateBucket(stateBucket);
