@@ -236,4 +236,8 @@ async.series([
         } else
             functionSwitch(msgValue);
     });
+
+	var packageJson = require('./package.json');
+
+	console.log('Telepat Worker version '+packageJson.version+' initialized at '+(new Date()).toString()+'. Queue: "'+topic+'". Consumer index: '+consumerIndex);
 });
