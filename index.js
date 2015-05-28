@@ -238,11 +238,8 @@ async.series([
 		if (kafkaConsumer)
 			kafkaConsumer = null;
 
-		kafkaConsumer = new kafka.HighLevelConsumer(kafkaClient, [{topic: topic}], {groupId: topic});
-
-		kafkaClient.on('disconnected', function() {
-			console.log('Disconnected');
-		});
+		kafkaConsumerClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'Consumer-'+topic+'-'+consumerIndex, {spinDelay: 200});
+		kafkaConsumer = new kafka.HighLevelConsumer(kafkaConsumerClient, [{topic: topic}], {groupId: topic});
 
 		callback();
 	}
