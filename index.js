@@ -224,6 +224,7 @@ async.series([
 		kafkaProducer.on('error', function(err) {
 			console.log('Failed connecting to Kafka "'+config.kafka.host+'": '+err.message);
 			console.log('Retrying...');
+			kafkaClient.close();
 			setTimeout(function () {
 				KafkaProducer(callback);
 			}, 1000);
