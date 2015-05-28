@@ -54,7 +54,7 @@ if (topics.indexOf(topic) === -1 && topic.slice(-9) !== 'transport') {
 
 process.title = config.kafka.clientName+'-'+topic+'-'+consumerIndex;
 
-var kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'-'+topic+'-'+consumerIndex);
+var kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'-'+topic+'-'+consumerIndex, {spinDelay: 200});
 kafkaProducer = null;
 kafkaConsumer = null;
 
@@ -214,6 +214,10 @@ async.series([
 			kafkaProducer = null;
 
 		kafkaProducer = new kafka.HighLevelProducer(kafkaClient);
+		kafkaProducer.on('ready', function() {
+			console.log('Producer connected to Kafka.');
+			callback();
+		});
 
 		kafkaProducer.on('error', function(err) {
 			console.log('Failed connecting to Kafka "'+config.kafka.host+'": '+err.message);
@@ -222,12 +226,6 @@ async.series([
 				KafkaProducer(callback);
 			}, 1000);
 		});
-
-		kafkaProducer.on('ready', function() {
-			console.log('Producer connected to Kafka.');
-			callback();
-		});
-		console.log('kafka producer');
 	},
 	function KafkaConsumer(callback) {
 		if (kafkaConsumer)
@@ -244,12 +242,12 @@ async.series([
 
 		kafkaClient.on('connected', function() {
 			console.log('Consumer connected to Kafka.');
-			callback();
 		});
 
 		kafkaClient.on('disconnected', function() {
 			console.log('Disconnected');
 		});
+		callback();
 	}
 ], function(err) {
     Models.Application.setBucket(bucket);
