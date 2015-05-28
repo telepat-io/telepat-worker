@@ -66,7 +66,7 @@ process.on('SIGUSR2', function() {
     kafkaClient.close();
 });
 
-process.on('SIGTERM', function() {
+process.on('SIGINT', function() {
     console.log('SIGTERM');
     bucket.disconnect();
     stateBucket.disconnect();
@@ -74,17 +74,6 @@ process.on('SIGTERM', function() {
     kafkaClient.close(function() {
         process.exit(-1);
     });
-});
-
-process.on('exit', function() {
-    console.log('EXIT');
-    if (bucket)
-        bucket.disconnect();
-    if (stateBucket)
-        stateBucket.disconnect();
-    if (opIdentifiersBucket)
-        opIdentifiersBucket.disconnect();
-    kafkaClient.close();
 });
 
 var transport = null;
@@ -212,12 +201,13 @@ async.series([
 			callback();
 		});
     },
-	function KafkaProducer(callback) {
+	function Kafka(callback) {
 		if (kafkaProducer)
 			kafkaProducer = null;
 
-		kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'-'+topic+'-'+consumerIndex, {spinDelay: 200});
+		kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'-'+topic+'-'+consumerIndex);
 
+		kafkaConsumer = new kafka.HighLevelConsumer(kafkaClient, [{topic: topic}], {groupId: topic});
 		kafkaProducer = new kafka.HighLevelProducer(kafkaClient);
 		kafkaProducer.on('ready', function() {
 			console.log('Connected to Kafka.');
@@ -230,18 +220,9 @@ async.series([
 			console.log('['+d.getSeconds()+'.'+d.getMilliseconds()+'] Retrying...');
 			kafkaClient.close();
 			setTimeout(function () {
-				KafkaProducer(callback);
+				Kafka(callback);
 			}, 1000);
 		});
-	},
-	function KafkaConsumer(callback) {
-		if (kafkaConsumer)
-			kafkaConsumer = null;
-
-		kafkaConsumerClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'Consumer-'+topic+'-'+consumerIndex, {spinDelay: 200});
-		kafkaConsumer = new kafka.HighLevelConsumer(kafkaConsumerClient, [{topic: topic}], {groupId: topic});
-
-		callback();
 	}
 ], function(err) {
     Models.Application.setBucket(bucket);
