@@ -213,9 +213,11 @@ async.series([
 		if (kafkaProducer)
 			kafkaProducer = null;
 
+		kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'-'+topic+'-'+consumerIndex, {spinDelay: 200});
+
 		kafkaProducer = new kafka.HighLevelProducer(kafkaClient);
 		kafkaProducer.on('ready', function() {
-			console.log('Producer connected to Kafka.');
+			console.log('Connected to Kafka.');
 			callback();
 		});
 
@@ -240,13 +242,10 @@ async.series([
 			}, 1000);
 		});
 
-		kafkaClient.on('connected', function() {
-			console.log('Consumer connected to Kafka.');
-		});
-
 		kafkaClient.on('disconnected', function() {
 			console.log('Disconnected');
 		});
+
 		callback();
 	}
 ], function(err) {
