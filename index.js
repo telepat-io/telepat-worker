@@ -164,8 +164,9 @@ async.series([
 
 		bucket = cluster.openBucket(config.couchbase.dataBucket);
         bucket.on('error', function(err) {
+			var d = new Date();
 			console.log('Failed connecting to Data Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
-			console.log('Retrying...');
+			console.log('['+d.getSeconds()+'.'+d.getMilliseconds()+'] Retrying...');
 			setTimeout(function () {
 				DataBucket(callback);
 			}, 1000);
@@ -181,8 +182,9 @@ async.series([
 
 		stateBucket = cluster.openBucket(config.couchbase.stateBucket);
         stateBucket.on('error', function(err) {
+			var d = new Date();
 			console.log('Failed connecting to State Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
-			console.log('Retrying...');
+			console.log('['+d.getSeconds()+'.'+d.getMilliseconds()+'] Retrying...');
 			setTimeout(function () {
 				StateBucket(callback);
 			}, 1000);
@@ -198,8 +200,9 @@ async.series([
 
 		opIdentifiersBucket = cluster.openBucket(config.couchbase.opIdentifierBucket);
         opIdentifiersBucket.on('error', function(err) {
+			var d = new Date();
 			console.log('Failed connecting to Op Identifiers Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
-			console.log('Retrying...');
+			console.log('['+d.getSeconds()+'.'+d.getMilliseconds()+'] Retrying...');
 			setTimeout(function () {
 				OpIdentifiersBucket(callback);
 			}, 1000);
@@ -222,8 +225,9 @@ async.series([
 		});
 
 		kafkaProducer.on('error', function(err) {
+			var d = new Date();
 			console.log('Failed connecting to Kafka "'+config.kafka.host+'": '+err.message);
-			console.log('Retrying...');
+			console.log('['+d.getSeconds()+'.'+d.getMilliseconds()+'] Retrying...');
 			kafkaClient.close();
 			setTimeout(function () {
 				KafkaProducer(callback);
@@ -235,13 +239,6 @@ async.series([
 			kafkaConsumer = null;
 
 		kafkaConsumer = new kafka.HighLevelConsumer(kafkaClient, [{topic: topic}], {groupId: topic});
-		kafkaConsumer.on('error', function(err) {
-			console.log('Failed connecting to Kafka "'+config.kafka.host+'": '+err.message);
-			console.log('Retrying...');
-			setTimeout(function () {
-				KafkaConsumer(callback);
-			}, 1000);
-		});
 
 		kafkaClient.on('disconnected', function() {
 			console.log('Disconnected');
