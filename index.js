@@ -1,8 +1,9 @@
- args = require('electron').argv();
+var args = require('electron').argv();
 var cb = require('couchbase');
 var kafka = require('kafka-node');
 var async = require('async');
 var sizeof = require('object-sizeof');
+var colors = require('colors');
 
 var Models = require('octopus-models-api');
 
@@ -48,13 +49,13 @@ var topic = args.params.t;
 var consumerIndex = args.params.i;
 
 if (topics.indexOf(topic) === -1 && topic.slice(-9) !== 'transport') {
-    console.error('Topic must be one of '+topics.toString()+' or a transport topic.');
+    console.error(('Topic must be one of '+topics.toString()+' or a transport topic.').red);
     process.exit(-1);
 }
 
 process.title = config.kafka.clientName+'-'+topic+'-'+consumerIndex;
 
-var kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'-'+topic+'-'+consumerIndex, {spinDelay: 200});
+kafkaClient = null;
 kafkaProducer = null;
 kafkaConsumer = null;
 
@@ -67,7 +68,7 @@ process.on('SIGUSR2', function() {
 });
 
 process.on('SIGINT', function() {
-    console.log('SIGTERM');
+    console.log('SIGINT');
     bucket.disconnect();
     stateBucket.disconnect();
     opIdentifiersBucket.disconnect();
@@ -154,14 +155,14 @@ async.series([
 		bucket = cluster.openBucket(config.couchbase.dataBucket);
         bucket.on('error', function(err) {
 			var d = new Date();
-			console.log('Failed connecting to Data Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
-			console.log('['+d.getSeconds()+'.'+d.getMilliseconds()+'] Retrying...');
+			console.log('Failed'.bold.red+' connecting to Data Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
+			console.log('Retrying...');
 			setTimeout(function () {
 				DataBucket(callback);
 			}, 1000);
         });
 		bucket.on('connect', function() {
-			console.log('Connected to Data bucket on couchbase.');
+			console.log('Connected to Data bucket on couchbase.'.green);
 			callback();
 		});
     },
@@ -172,14 +173,14 @@ async.series([
 		stateBucket = cluster.openBucket(config.couchbase.stateBucket);
         stateBucket.on('error', function(err) {
 			var d = new Date();
-			console.log('Failed connecting to State Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
-			console.log('['+d.getSeconds()+'.'+d.getMilliseconds()+'] Retrying...');
+			console.log('Failed'.bold.red+' connecting to State Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
+			console.log('Retrying...');
 			setTimeout(function () {
 				StateBucket(callback);
 			}, 1000);
         });
 		stateBucket.on('connect', function() {
-			console.log('Connected to State bucket on couchbase.');
+			console.log('Connected to State bucket on couchbase.'.green);
 			callback();
 		});
     },
@@ -190,38 +191,32 @@ async.series([
 		opIdentifiersBucket = cluster.openBucket(config.couchbase.opIdentifierBucket);
         opIdentifiersBucket.on('error', function(err) {
 			var d = new Date();
-			console.log('Failed connecting to Op Identifiers Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
-			console.log('['+d.getSeconds()+'.'+d.getMilliseconds()+'] Retrying...');
+			console.log('Failed'.bold.red+' connecting to Op Identifiers Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
+			console.log('Retrying...');
 			setTimeout(function () {
 				OpIdentifiersBucket(callback);
 			}, 1000);
         });
 		opIdentifiersBucket.on('connect', function() {
-			console.log('Connected to Op Identifiers bucket on couchbase.');
+			console.log('Connected to Op Identifiers bucket on couchbase.'.green);
 			callback();
 		});
     },
-	function Kafka(callback) {
-		if (kafkaProducer)
-			kafkaProducer = null;
-
+	function KafkaClient(callback) {
+		console.log('Waiting for Zookeeper connection.');
 		kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'-'+topic+'-'+consumerIndex);
+		kafkaClient.on('ready', function() {
+			console.log('Client connected to Zookeeper.'.green);
 
-		kafkaConsumer = new kafka.HighLevelConsumer(kafkaClient, [{topic: topic}], {groupId: topic});
-		kafkaProducer = new kafka.HighLevelProducer(kafkaClient);
-		kafkaProducer.on('ready', function() {
-			console.log('Connected to Kafka.');
+			kafkaConsumer = new kafka.HighLevelConsumer(kafkaClient, [{topic: topic}], {groupId: topic});
+			kafkaConsumer.on('error', function() {});
+			kafkaProducer = new kafka.HighLevelProducer(kafkaClient);
+			kafkaProducer.on('error', function() {});
+
 			callback();
 		});
-
-		kafkaProducer.on('error', function(err) {
-			var d = new Date();
-			console.log('Failed connecting to Kafka "'+config.kafka.host+'": '+err.message);
-			console.log('['+d.getSeconds()+'.'+d.getMilliseconds()+'] Retrying...');
-			kafkaClient.close();
-			setTimeout(function () {
-				Kafka(callback);
-			}, 1000);
+		kafkaClient.on('error', function() {
+			console.log('Kafka broker not available.'.red+' Trying to reconnect.');
 		});
 	}
 ], function(err) {
@@ -240,7 +235,7 @@ async.series([
 
 		} catch (e) {
 			if (e.code == 'MODULE_NOT_FOUND') {
-				console.error('Transport topic "'+topic+'" is not a valid transport type.');
+				console.error(('Transport topic "'+topic+'" is not a valid transport type.').red);
 				process.exit(-1);
 			} else
 				throw e;
@@ -277,7 +272,7 @@ async.series([
 	};
 
 	kafkaConsumer.on('message', function(message) {
-        console.log(message.value);
+        console.log(message.value.cyan);
 
         var msgValue = JSON.parse(message.value);
 
