@@ -90,10 +90,10 @@ formKeys = function(appId, item, callback) {
 	var user_id = item.user_id;
 	var id = item.id;
 
-	for (var r in Models.Application.loadedAppModels[message.applicationId][mdl].belongsTo) {
-		if (item[Models.Application.loadedAppModels[message.applicationId][mdl].belongsTo[r].parentModel+'_id']) {
-			var parent = {model: Models.Application.loadedAppModels[message.applicationId][mdl].belongsTo[r].parentModel,
-				id: item[Models.Application.loadedAppModels[message.applicationId][mdl].belongsTo[r].parentModel+'_id']};
+	for (var r in Models.Application.loadedAppModels[appId][mdl].belongsTo) {
+		if (item[Models.Application.loadedAppModels[appId][mdl].belongsTo[r].parentModel+'_id']) {
+			var parent = {model: Models.Application.loadedAppModels[appId][mdl].belongsTo[r].parentModel,
+				id: item[Models.Application.loadedAppModels[appId][mdl].belongsTo[r].parentModel+'_id']};
 		}
 	}
 
