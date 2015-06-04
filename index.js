@@ -82,10 +82,12 @@ var transport = null;
 /**
  * Forms the key of a subscription document (only for simple filters)
  * @param appId integer Application ID
+ * @param context integer
  * @param item Object Item
+ * @param callback Function
  * @returns string[] 5 Subscription keys (some of them but not all may be null).
  */
-formKeys = function(appId, item, callback) {
+formKeys = function(appId, context, item, callback) {
 	var mdl = item.type;
 	var user_id = item.user_id;
 	var id = item.id;
@@ -129,7 +131,7 @@ formKeys = function(appId, item, callback) {
 
 	async.each(partialKeys, function(key, c) {
 		if(key) {
-			var query = stateBucket.ViewQuery.from('dev_state_document', 'by_subscription').custom({stale: false, key: '"'+key+'"'});
+			var query = cb.ViewQuery.from('dev_state_document', 'by_subscription').custom({stale: false, key: '"'+key+'"'});
 			stateBucket.query(query, function(err, results) {
 				for(var k in results) {
 					var queryObject = JSON.parse((new Buffer(results[k].value)).toString('ascii'));
@@ -154,7 +156,6 @@ async.series([
 
 		bucket = cluster.openBucket(config.couchbase.dataBucket);
         bucket.on('error', function(err) {
-			var d = new Date();
 			console.log('Failed'.bold.red+' connecting to Data Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
 			console.log('Retrying...');
 			setTimeout(function () {
@@ -172,7 +173,6 @@ async.series([
 
 		stateBucket = cluster.openBucket(config.couchbase.stateBucket);
         stateBucket.on('error', function(err) {
-			var d = new Date();
 			console.log('Failed'.bold.red+' connecting to State Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
 			console.log('Retrying...');
 			setTimeout(function () {
@@ -190,7 +190,6 @@ async.series([
 
 		opIdentifiersBucket = cluster.openBucket(config.couchbase.opIdentifierBucket);
         opIdentifiersBucket.on('error', function(err) {
-			var d = new Date();
 			console.log('Failed'.bold.red+' connecting to Op Identifiers Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
 			console.log('Retrying...');
 			setTimeout(function () {
