@@ -141,6 +141,8 @@ formKeys = function(appId, context, item, callback) {
 				}
 				c();
 			});
+		} else {
+			c();
 		}
 	}, function(err) {
 		if (err) return callback(err);
@@ -188,7 +190,7 @@ async.series([
 		if(opIdentifiersBucket)
 			delete opIdentifiersBucket;
 
-		opIdentifiersBucket = cluster.openBucket(config.couchbase.opIdentifierBucket);
+		opIdentifiersBucket = cluster.openBucket(config.couchbase.opIdentifiersBucket);
         opIdentifiersBucket.on('error', function(err) {
 			console.log('Failed'.bold.red+' connecting to Op Identifiers Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
 			console.log('Retrying...');
@@ -214,8 +216,8 @@ async.series([
 
 			callback();
 		});
-		kafkaClient.on('error', function() {
-			console.log('Kafka broker not available.'.red+' Trying to reconnect.');
+		kafkaClient.on('error', function(err) {
+			console.log('Kafka broker not available.'.red+' Trying to reconnect.'+err);
 		});
 	}
 ], function(err) {
@@ -264,7 +266,7 @@ async.series([
 			default: {
 				var topicParts = topic.split('_');
 				if (topicParts[1] === 'transport') {
-					transport.Send(msgValue);
+					transport.send(msgValue);
 				}
 			}
 		}
