@@ -13,8 +13,7 @@ if (process.env.TP_CB_HOST) {
 	config.couchbase = {
 		host: process.env.TP_CB_HOST,
 		dataBucket: process.env.TP_CB_BUCKET,
-		stateBucket: process.env.TP_CB_STATE_BUCKET,
-		opIdentifiersBucket: process.env.TP_CB_OPIDENTIFIERS_BUCKET
+		stateBucket: process.env.TP_CB_STATE_BUCKET
 	};
 } else {
 	config.couchbase = require('./config.json').couchbase;
@@ -34,10 +33,6 @@ var cluster = new cb.Cluster('couchbase://'+config.couchbase.host);
 
 bucket = null;
 stateBucket = null;
-/*	this bucket is used to uniquely identify an operation (create/read/update/delete) so the writer doesn't
-	perform the same operation multiple times
- */
-opIdentifiersBucket = null;
 
 var topics = ['aggregation', 'write', 'track', 'update_friends'];
 
@@ -63,7 +58,6 @@ process.on('SIGUSR2', function() {
     console.log('SIGUSR2');
     bucket.disconnect();
     stateBucket.disconnect();
-    opIdentifiersBucket.disconnect();
     kafkaClient.close();
 });
 
@@ -71,7 +65,6 @@ process.on('SIGINT', function() {
     console.log('SIGINT');
     bucket.disconnect();
     stateBucket.disconnect();
-    opIdentifiersBucket.disconnect();
     kafkaClient.close(function() {
         process.exit(-1);
     });
@@ -113,7 +106,7 @@ formKeys = function(appId, context, item, callback) {
     if (user_id && parent)
         userChildItemsChannelKey = userItemsChannelKey+':'+Models.Application.loadedAppModels[appId][parent.model].namespace+':'+parent.id;
 	if (id)
-		singleItemChannelKey = 'blg:'+Models.Application.loadedAppModels[appId][mdl].namespace+':'+id+':deltas';
+		singleItemChannelKey = 'blg:'+Models.Application.loadedAppModels[appId][mdl].namespace+':'+id;
 
 	var partialKeys = [allItemsChannelKey, userItemsChannelKey, allChildItemsChannelKey, userChildItemsChannelKey, singleItemChannelKey];
 
@@ -139,7 +132,7 @@ formKeys = function(appId, context, item, callback) {
 					if (Models.utils.testObject(item, queryObject))
 						result.push(k+':deltas');
 				}
-				c();
+				c(err);
 			});
 		} else {
 			c();
@@ -183,23 +176,6 @@ async.series([
         });
 		stateBucket.on('connect', function() {
 			console.log('Connected to State bucket on couchbase.'.green);
-			callback();
-		});
-    },
-    function OpIdentifiersBucket(callback) {
-		if(opIdentifiersBucket)
-			delete opIdentifiersBucket;
-
-		opIdentifiersBucket = cluster.openBucket(config.couchbase.opIdentifiersBucket);
-        opIdentifiersBucket.on('error', function(err) {
-			console.log('Failed'.bold.red+' connecting to Op Identifiers Bucket on couchbase "'+config.couchbase.host+'": '+err.message);
-			console.log('Retrying...');
-			setTimeout(function () {
-				OpIdentifiersBucket(callback);
-			}, 1000);
-        });
-		opIdentifiersBucket.on('connect', function() {
-			console.log('Connected to Op Identifiers bucket on couchbase.'.green);
 			callback();
 		});
     },

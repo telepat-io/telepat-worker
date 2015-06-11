@@ -2,8 +2,7 @@
   "couchbase": {
     "host": "blg-couch.cloudapp.net",
     "dataBucket": "default",
-    "stateBucket": "state",
-    "opIdentifierBucket": "op-identifiers"
+    "stateBucket": "state"
   },
   "kafka": {
     "host": "blg-kafka.cloudapp.net",

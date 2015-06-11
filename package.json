@@ -20,6 +20,7 @@
   "dependencies": {
     "apn": "^1.7.3",
     "async": "^1.2.0",
+    "bfj": "^1.1.0",
     "colors": "^1.1.0",
     "couchbase": "^2.0.8",
     "electron": "^0.4.1",
