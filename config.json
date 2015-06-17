@@ -1,6 +1,6 @@
 {
   "couchbase": {
-    "host": "blg-couch.cloudapp.net",
+    "host": "blg-couchbase.cloudapp.net",
     "dataBucket": "default",
     "stateBucket": "state"
   },
