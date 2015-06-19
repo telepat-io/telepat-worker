@@ -1,6 +1,6 @@
 {
   "name": "octopus-worker",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Worker for consuming tasks from the octopus api through the kafka server",
   "main": "index.js",
   "scripts": {
