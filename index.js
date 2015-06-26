@@ -4,6 +4,7 @@ var kafka = require('kafka-node');
 var async = require('async');
 var sizeof = require('object-sizeof');
 var colors = require('colors');
+var redis = require('redis');
 
 var Models = require('octopus-models-api');
 
@@ -29,10 +30,13 @@ if (process.env.TP_KFK_HOST) {
 	config.kafka = require('./config.json').kafka;
 }
 
+config.redis = require('./config.json').redis;
+
 var cluster = new cb.Cluster('couchbase://'+config.couchbase.host);
 
 bucket = null;
 stateBucket = null;
+redisClient = null;
 
 var topics = ['aggregation', 'write', 'track', 'update_friends'];
 
@@ -124,7 +128,7 @@ formKeys = function(appId, context, item, callback) {
 
 	async.each(partialKeys, function(key, c) {
 		if(key) {
-			var query = cb.ViewQuery.from('dev_state_document', 'by_subscription').custom({stale: false, key: '"'+key+'"'});
+			var query = cb.ViewQuery.from('state_document', 'by_subscription').custom({stale: false, key: '"'+key+'"'});
 			stateBucket.query(query, function(err, results) {
 				for(var k in results) {
 					var queryObject = JSON.parse((new Buffer(results[k].value)).toString('ascii'));
@@ -179,6 +183,20 @@ async.series([
 			callback();
 		});
     },
+	function RedisClient(callback) {
+		if (redisClient)
+			redisClient = null;
+
+		redisClient = redis.createClient(config.redis.port, config.redis.host);
+		redisClient.on('error', function(err) {
+			console.log('Failed'.bold.red+' connecting to Redis "'+config.redis.host+'": '+err.message);
+			console.log('Retrying...');
+		});
+		redisClient.on('ready', function() {
+			console.log('Client connected to Redis.'.green);
+			callback();
+		});
+	},
 	function KafkaClient(callback) {
 		console.log('Waiting for Zookeeper connection.');
 		kafkaClient = new kafka.Client(config.kafka.host+':'+config.kafka.port+'/', config.kafka.clientName+'-'+topic+'-'+consumerIndex);
