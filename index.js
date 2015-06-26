@@ -128,7 +128,7 @@ formKeys = function(appId, context, item, callback) {
 
 	async.each(partialKeys, function(key, c) {
 		if(key) {
-			var query = cb.ViewQuery.from('state_document', 'by_subscription').custom({stale: false, key: '"'+key+'"'});
+			var query = cb.ViewQuery.from('dev_state_document', 'by_subscription').custom({stale: false, key: '"'+key+'"'});
 			stateBucket.query(query, function(err, results) {
 				for(var k in results) {
 					var queryObject = JSON.parse((new Buffer(results[k].value)).toString('ascii'));
