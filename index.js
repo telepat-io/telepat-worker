@@ -30,7 +30,14 @@ if (process.env.TP_KFK_HOST) {
 	config.kafka = require('./config.json').kafka;
 }
 
-config.redis = require('./config.json').redis;
+if (process.env.TP_REDIS_HOST) {
+	config.redis = {
+		host: process.env.TP_REDIS_HOST,
+		port: process.env.TP_REDIS_PORT
+	};
+} else {
+	config.redis = require('./config.json').redis;
+}
 
 var cluster = new cb.Cluster('couchbase://'+config.couchbase.host);
 
