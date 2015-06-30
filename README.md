@@ -1,14 +1,17 @@
 # Telepat Workers
 
-There are 3 main workers:
+There are 3 main types of workers:
 
-* Aggregator: writes deltas (individual operation on the database) in the database
-* Writer: reads deltas and processes them (CRUD operations)
-* Track: *not implemented yet*
+* Aggregators: writes deltas (deltas are a representation of an individual operations on the database) in the database.
+These workers then send messages to writers notifying them that they have work to do.
+* Writers: reads deltas and processes them (CRUD operations). They then send messages to transport workers with the processed
+deltas.
+* Trackers: *not implemented yet*
 
-Then there are the client transport workers. These workers are in charge of communicating with the client. They send
-messages containing changes to the database objects. Right now there are 3 transport workers: for Android (using gcm),
-iOS (APN) and sockets for other clients.
+Then there are the client transport type workers. These type of workers are in charge of communicating with the client.
+They send messages containing changes to the database objects. Right now there are 3 transport workers: for Android (using gcm),
+iOS (APN) and sockets for other clients. These workers send messages only to clients that are subscribed to the channel
+(writers include these in the messages sent by them to transport workers).
 
 ## Quick start up guide
 
