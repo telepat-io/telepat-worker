@@ -1,21 +1,40 @@
 {
-  "name": "octopus-worker",
+  "name": "telepat-worker",
   "version": "0.1.3",
-  "description": "Worker for consuming tasks from the octopus api through the kafka server",
+  "description": "Telepat Workers are responsible for processing requests coming from the API and sending notifications to clients",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "http://freshweb.ro:7990/scm/bel/octopus-worker.git"
+    "url": "git@github.com:telepat-io/telepat-worker.git"
   },
   "keywords": [
-    "octopus",
+    "telepat",
     "worker",
     "kafka"
   ],
-  "author": "Razvan Botea <razvan@appscend.com>",
+  "author": {
+	"name": "Răzvan Botea",
+	"email": "razvan@telepat.io"
+  },
+  "contributors": [
+	{
+	  "name": "Răzvan Botea",
+	  "email": "razvan@telepat.io"
+	},
+	{
+	  "name": "Gabi Dobocan",
+	  "email": "gabi@telepat.io"
+	}
+  ],
+  "engines": {
+	"node": ">=0.12.0"
+  },
+  "bugs": {
+	"url": "https://github.com/telepat-io/telepat-worker/issues"
+  },
   "license": "Apache-2.0",
   "dependencies": {
     "apn": "^1.7.3",
@@ -31,7 +50,7 @@
     "microtime-nodejs": "^1.0.0",
     "node-gcm-service": "^0.2.8",
     "object-sizeof": "^1.0.6",
-    "private-repo": "git+http://freshweb.ro:7990/scm/bel/octopus-models-lib.git#develop",
+    "telepat-models": "~0.1.2",
     "redis": "^0.12.1",
     "socket.io": "^1.3.5",
     "uuid": "^2.0.1"
