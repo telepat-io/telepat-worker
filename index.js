@@ -1,5 +1,91 @@
 var args = require('electron').argv();
 var cb = require('couchbase');
+var async = require('async');
+var sizeof = require('object-sizeof');
+var colors = require('colors');
+var redis = require('redis');
+
+var Models = require('telepat-models');
+var kafka = require('./lib/kafka_client');
+
+var workerType = args.params.t;
+var workerIndex = args.params.i;
+/**
+ *
+ * @type {Base_Worker}
+ */
+var theWorker = null;
+
+switch (workerType) {
+	case 'aggregation':	{
+		var AggregationWorker = require('./lib/aggregation_worker');
+		theWorker = new AggregationWorker(workerIndex);
+
+		break;
+	}
+	default: {
+		console.log('Invalid worker type "'+workerType+'"');
+		process.exit(-1);
+	}
+}
+
+var cluster = new cb.Cluster('couchbase://'+theWorker.config.couchbase.host);
+
+async.series([
+	function DataBucket(callback) {
+		if (Models.Application.bucket)
+			Models.Application.bucket = null;
+
+		Models.Application.bucket = cluster.openBucket(theWorker.config.couchbase.dataBucket);
+		Models.Application.bucket.on('error', function(err) {
+			console.log('Failed'.bold.red+' connecting to Data Bucket on couchbase "'+theWorker.config.couchbase.host+'": '+err.message);
+			console.log('Retrying...');
+			setTimeout(function () {
+				DataBucket(callback);
+			}, 1000);
+		});
+		Models.Application.bucket.on('connect', function() {
+			console.log('Connected to Data bucket on couchbase.'.green);
+			callback();
+		});
+	},
+	function RedisClient(callback) {
+		if (Models.Application.redisClient)
+			Models.Application.redisClient = null;
+
+		Models.Application.redisClient = redis.createClient(theWorker.config.redis.port, theWorker.config.redis.host);
+		Models.Application.redisClient.on('error', function(err) {
+			console.log('Failed'.bold.red+' connecting to Redis "'+theWorker.config.redis.host+'": '+err.message);
+			console.log('Retrying...');
+		});
+		Models.Application.redisClient.on('ready', function() {
+			console.log('Client connected to Redis.'.green);
+			callback();
+		});
+	},
+	function KafkaClient(callback) {
+		console.log('Waiting for Zookeeper connection.');
+		var kafkaConfiguration = theWorker.config.kafka;
+		kafkaConfiguration.topic = workerType;
+
+		var kafkaClient = new kafka(theWorker.config.kafka.clientName+'-'+theWorker.name, kafkaConfiguration);
+		theWorker.setMessagingClient(kafkaClient);
+
+		kafkaClient.on('ready', function() {
+			console.log('Client connected to Zookeeper.'.green);
+			callback();
+		});
+		kafkaClient.on('error', function(err) {
+			console.log('Kafka broker not available.'.red+' Trying to reconnect.'+err);
+		});
+	}
+], function() {
+	theWorker.ready();
+});
+
+/*
+var args = require('electron').argv();
+var cb = require('couchbase');
 var kafka = require('kafka-node');
 var async = require('async');
 var sizeof = require('object-sizeof');
@@ -83,14 +169,14 @@ process.on('SIGINT', function() {
 
 var transport = null;
 
-/**
+/!**
  * Forms the key of a subscription document (only for simple filters)
  * @param appId integer Application ID
  * @param context integer
  * @param item Object Item
  * @param callback Function
  * @returns string[] 5 Subscription keys (some of them but not all may be null).
- */
+ *!/
 formKeys = function(appId, context, item, callback) {
 	var mdl = item.type;
 	var user_id = item.user_id;
@@ -157,7 +243,7 @@ formKeys = function(appId, context, item, callback) {
 //Open connections to databases
 async.series([
     function DataBucket(callback) {
-        if (bucket)
+        if (Models.Application.bucket)
 			bucket = null;
 
 		bucket = cluster.openBucket(config.couchbase.dataBucket);
@@ -295,3 +381,4 @@ async.series([
 
 	console.log('Telepat Worker version '+packageJson.version+' initialized at '+(new Date()).toString()+'. Queue: "'+topic+'". Consumer index: '+consumerIndex);
 });
+*/
