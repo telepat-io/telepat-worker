@@ -6,7 +6,7 @@ var sizeof = require('object-sizeof');
 var colors = require('colors');
 var redis = require('redis');
 
-var Models = require('octopus-models-api');
+var Models = require('telepat-models');
 
 var config = {};//require('./config.json');
 
