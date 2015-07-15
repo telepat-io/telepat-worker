@@ -8,6 +8,8 @@ var redis = require('redis');
 var Models = require('telepat-models');
 var kafka = require('./lib/kafka_client');
 
+Models.Application.setCB(cb);
+
 var workerType = args.params.t;
 var workerIndex = args.params.i;
 /**
@@ -20,6 +22,12 @@ switch (workerType) {
 	case 'aggregation':	{
 		var AggregationWorker = require('./lib/aggregation_worker');
 		theWorker = new AggregationWorker(workerIndex);
+
+		break;
+	}
+	case 'write': {
+		var WriterWorker = require('./lib/writer_worker');
+		theWorker = new WriterWorker(workerIndex);
 
 		break;
 	}
