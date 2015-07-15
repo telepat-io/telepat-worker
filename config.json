@@ -4,7 +4,7 @@
     "dataBucket": "default"
   },
   "kafka": {
-    "host": "10.32.0.12",
+    "host": "10.32.0.7",
     "port": 2181,
     "clientName": "telepat-worker"
   },
