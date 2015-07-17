@@ -3,15 +3,20 @@
 There are 3 main types of workers:
 
 * Aggregators: writes deltas (deltas are a representation of an individual operations on the database) in the database.
-These workers then send messages to writers notifying them that they have work to do.
+These workers then send messages to writers notifying them that they have work to do. This worker consumes messages from
+ the **aggregator** topic.
 * Writers: reads deltas and processes them (CRUD operations). They then send messages to transport workers with the processed
-deltas.
-* Trackers: *not implemented yet*
+deltas. This worker consumes messages from the **write* topic.
+* Trackers: *not implemented yet* (**track** topic)
 
 Then there are the client transport type workers. These type of workers are in charge of communicating with the client.
 They send messages containing changes to the database objects. Right now there are 3 transport workers: for Android (using gcm),
 iOS (APN) and sockets for other clients. These workers send messages only to clients that are subscribed to the channel
 (writers include these in the messages sent by them to transport workers).
+
+* **android_transport**, the topic from where the android transport worker consumes messages
+* **ios_transport**, the topic from where the ios transport worker consumes messages
+* **sockets_transport**, the topic from where the sockets transport worker consumes messages
 
 ## Quick start up guide
 
