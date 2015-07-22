@@ -1,6 +1,6 @@
 {
   "name": "telepat-worker",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Telepat Workers are responsible for processing requests coming from the API and sending notifications to clients",
   "main": "index.js",
   "scripts": {
