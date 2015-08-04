@@ -1,15 +1,15 @@
 {
   "couchbase": {
-    "host": "devel-couchbase.cloudapp.net",
+    "host": "blg-couchbase.cloudapp.net",
     "dataBucket": "default"
   },
   "kafka": {
-    "host": "10.32.0.7",
+    "host": "10.32.0.14",
     "port": 2181,
     "clientName": "telepat-worker"
   },
   "redis": {
-	"host": "10.32.0.13",
+	"host": "10.32.0.4",
 	"port": 6379
   }
 }
