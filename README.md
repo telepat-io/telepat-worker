@@ -6,7 +6,7 @@ There are 3 main types of workers:
 These workers then send messages to writers notifying them that they have work to do. This worker consumes messages from
  the **aggregator** topic.
 * Writers: reads deltas and processes them (CRUD operations). They then send messages to transport workers with the processed
-deltas. This worker consumes messages from the **write* topic.
+deltas. This worker consumes messages from the **write** topic.
 * Trackers: *not implemented yet* (**track** topic)
 
 Then there are the client transport type workers. These type of workers are in charge of communicating with the client.
