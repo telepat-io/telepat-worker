@@ -1,3 +1,11 @@
+# 0.2.2
+
+* Various bug and crash fixes
+* Added context id to operations on application models
+* Update patches are received one by one (no longer an array of patches)
+* Created objects are returned in the "new" deltas message (with full properties)
+* Added this CHANGELOG
+
 # 0.2.0
 
 * Added dockerfile
@@ -22,6 +30,6 @@
 
 * Fixed sockets transport client
 
-# 0.1
+# 0.1.0
 
 * Initial pre-alpha release
