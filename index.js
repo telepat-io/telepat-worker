@@ -1,5 +1,4 @@
 var args = require('electron').argv();
-var cb = require('couchbase');
 var async = require('async');
 var sizeof = require('object-sizeof');
 var colors = require('colors');
@@ -7,8 +6,6 @@ var redis = require('redis');
 
 var Models = require('telepat-models');
 var kafka = require('./lib/kafka_client');
-
-Models.Application.setCB(cb);
 
 var workerType = args.params.t;
 var workerIndex = args.params.i;
@@ -49,23 +46,12 @@ switch (workerType) {
 	}
 }
 
-var cluster = new cb.Cluster('couchbase://'+theWorker.config.couchbase.host);
+Models.Application.datasource = new Models.Datasource();
+Models.Application.datasource.setMainDatabase(new Models.ElasticSearch(require('./config.json').elasticsearch));
 
 async.series([
 	function DataBucket(callback) {
-		if (Models.Application.bucket)
-			Models.Application.bucket = null;
-
-		Models.Application.bucket = cluster.openBucket(theWorker.config.couchbase.dataBucket);
-		Models.Application.bucket.on('error', function(err) {
-			console.log('Failed'.bold.red+' connecting to Data Bucket on couchbase "'+theWorker.config.couchbase.host+'": '+err.message);
-			console.log('Retrying...');
-			setTimeout(function () {
-				DataBucket(callback);
-			}, 1000);
-		});
-		Models.Application.bucket.on('connect', function() {
-			console.log('Connected to Data bucket on couchbase.'.green);
+		Models.Application.datasource.dataStorage.onReady(function() {
 			callback();
 		});
 	},
