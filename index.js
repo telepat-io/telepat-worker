@@ -46,8 +46,11 @@ switch (workerType) {
 	}
 }
 
+var mainConfiguration = require('./config.json');
+var mainDatabase = mainConfiguration.main_database;
+
 Models.Application.datasource = new Models.Datasource();
-Models.Application.datasource.setMainDatabase(new Models.ElasticSearch(require('./config.json').elasticsearch));
+Models.Application.datasource.setMainDatabase(new Models[mainDatabase](mainConfiguration[mainDatabase]));
 
 async.series([
 	function DataBucket(callback) {
