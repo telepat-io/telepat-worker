@@ -1,7 +1,6 @@
 var args = require('electron').argv();
 var async = require('async');
-var sizeof = require('object-sizeof');
-var colors = require('colors');
+colors = require('colors');
 var redis = require('redis');
 
 var Models = require('telepat-models');
@@ -46,11 +45,8 @@ switch (workerType) {
 	}
 }
 
-var mainConfiguration = require('./config.json');
-var mainDatabase = mainConfiguration.main_database;
-
 Models.Application.datasource = new Models.Datasource();
-Models.Application.datasource.setMainDatabase(new Models[mainDatabase](mainConfiguration[mainDatabase]));
+Models.Application.datasource.setMainDatabase(new Models[theWorker.config.main_database](theWorker.config[theWorker.config.main_database]));
 
 async.series([
 	function DataBucket(callback) {
