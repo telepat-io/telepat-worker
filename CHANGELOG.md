@@ -1,3 +1,9 @@
+# 0.2.3
+
+* Fixed A LOT of bugs
+* Integrated the new ElasticSearch db adapter
+* Better error handling when env variables are missing and/or config file is missing 	
+
 # 0.2.2
 
 * Various bug and crash fixes

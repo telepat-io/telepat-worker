@@ -27,14 +27,14 @@ iOS (APN) and sockets for other clients. These workers send messages only to cli
 
 ## Configuring
 
-There are two ways to configure: either modify the config file `./config.json` or
-set up environment variables (this method is the most convenient):
+There are two ways to configure: either by using the `config.example.json` config file (rename it into config.json)
+or by setting up environment variables (this method is the most convenient):
 
 * `TP_KFK_HOST`: Kafka (zooekeeper) server
 * `TP_KFK_PORT`: Kafka (zooekeeper) server port
 * `TP_KFK_CLIENT`: Name for the kafka client
-* `TP_CB_HOST`: Couchbase server
-* `TP_CB_BUCKET`: Main data bucket of the couchbase server
-* `TP_CB_STATE_BUCKET`: State bucket of the couchbase server
 * `TP_REDIS_HOST`: Redis database server
 * `TP_REDIS_PORT`: Redis server port
+* `TP_MAIN_DB`: Name of the main database which to use. Should be the same as the exported variable in telepat-models
+* `TP_ES_HOST`: Elasticsearch server (if you are using the ES database adapter)
+* `TP_ES_PORT`: Elasticsearch server port (if you are using the ES database adapter)
