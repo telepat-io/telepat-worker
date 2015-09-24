@@ -1,14 +1,14 @@
 {
   "main_database": "ElasticSearch",
+  "message_queue": "Kafka",
   "ElasticSearch": {
 	"host": "10.0.0.1",
 	"port": 9200,
 	"index": "default"
   },
-  "kafka": {
+  "Kafka": {
     "host": "10.0.0.2",
-    "port": 2181,
-    "clientName": "telepat-worker"
+    "port": 2181
   },
   "redis": {
 	"host": "10.0.0.3",

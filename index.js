@@ -4,7 +4,6 @@ colors = require('colors');
 var redis = require('redis');
 
 var Models = require('telepat-models');
-var kafka = require('./lib/kafka_client');
 
 var workerType = args.params.t;
 var workerIndex = args.params.i;
@@ -69,19 +68,18 @@ async.series([
 		});
 	},
 	function KafkaClient(callback) {
-		console.log('Waiting for Zookeeper connection.');
-		var kafkaConfiguration = theWorker.config.kafka;
-		kafkaConfiguration.topic = workerType;
+		console.log('Waiting for Messaging Client connection.');
+		var kafkaConfiguration = theWorker.config[theWorker.config.message_queue];
 
-		var kafkaClient = new kafka(theWorker.config.kafka.clientName+'-'+theWorker.name, kafkaConfiguration);
-		theWorker.setMessagingClient(kafkaClient);
+		var messagingClient = new Models[theWorker.config.message_queue](kafkaConfiguration, workerType);
+		theWorker.setMessagingClient(messagingClient);
 
-		kafkaClient.on('ready', function() {
-			console.log('Client connected to Zookeeper.'.green);
+		messagingClient.on('ready', function() {
+			console.log(('Connected to Messaging Client '+theWorker.config.message_queue).green);
 			callback();
 		});
-		kafkaClient.on('error', function(err) {
-			console.log('Kafka broker not available.'.red+' Trying to reconnect.'+err);
+		messagingClient.on('error', function(err) {
+			console.log('Messaging client not available.'.red+' Trying to reconnect.'+err);
 		});
 	}
 ], function() {
