@@ -71,7 +71,7 @@ async.series([
 		console.log('Waiting for Messaging Client connection.');
 		var kafkaConfiguration = theWorker.config[theWorker.config.message_queue];
 
-		var messagingClient = new Models[theWorker.config.message_queue](kafkaConfiguration, workerType);
+		var messagingClient = new Models[theWorker.config.message_queue](kafkaConfiguration, 'telepat-worker-'+workerType+'-'+workerIndex, workerType);
 		theWorker.setMessagingClient(messagingClient);
 
 		messagingClient.on('ready', function() {

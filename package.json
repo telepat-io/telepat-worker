@@ -44,7 +44,6 @@
 	"colors": "^1.1.0",
 	"electron": "^0.4.1",
 	"hiredis": "^0.4.0",
-	"kafka-node": "^0.2.27",
 	"mandrill-api": "^1.0.41",
 	"microtime-nodejs": "^1.0.0",
 	"node-gcm-service": "^0.2.8",
