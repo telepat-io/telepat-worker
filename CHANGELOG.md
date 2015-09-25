@@ -1,8 +1,13 @@
+# 0.2.4
+
+* Fixed update_friends worker
+* Refactored messaging client: moved it to telepat-models
+
 # 0.2.3
 
 * Fixed A LOT of bugs
 * Integrated the new ElasticSearch db adapter
-* Better error handling when env variables are missing and/or config file is missing 	
+* Better error handling when env variables are missing and/or config file is missing
 
 # 0.2.2
 
