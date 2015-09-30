@@ -48,9 +48,9 @@
 	"microtime-nodejs": "^1.0.0",
 	"node-gcm-service": "^0.2.8",
 	"object-sizeof": "^1.0.6",
-	"telepat-models": "telepat-io/telepat-models#develop",
 	"redis": "^0.12.1",
 	"socket.io": "^1.3.5",
+	"telepat-models": "telepat-io/telepat-models#develop",
 	"uuid": "^2.0.1"
   }
 }

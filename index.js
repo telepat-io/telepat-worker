@@ -48,12 +48,12 @@ Models.Application.datasource = new Models.Datasource();
 Models.Application.datasource.setMainDatabase(new Models[theWorker.config.main_database](theWorker.config[theWorker.config.main_database]));
 
 async.series([
-	function DataBucket(callback) {
+	function(callback) {
 		Models.Application.datasource.dataStorage.onReady(function() {
 			callback();
 		});
 	},
-	function RedisClient(callback) {
+	function(callback) {
 		if (Models.Application.redisClient)
 			Models.Application.redisClient = null;
 
@@ -67,19 +67,16 @@ async.series([
 			callback();
 		});
 	},
-	function KafkaClient(callback) {
+	function(callback) {
 		console.log('Waiting for Messaging Client connection.');
-		var kafkaConfiguration = theWorker.config[theWorker.config.message_queue];
+		var messageQueueConfig = theWorker.config[theWorker.config.message_queue];
 
-		var messagingClient = new Models[theWorker.config.message_queue](kafkaConfiguration, 'telepat-worker-'+workerType+'-'+workerIndex, workerType);
+		var messagingClient = new Models[theWorker.config.message_queue](messageQueueConfig, 'telepat-worker-'+workerType+'-'+workerIndex, workerType);
 		theWorker.setMessagingClient(messagingClient);
 
-		messagingClient.on('ready', function() {
+		messagingClient.onReady(function() {
 			console.log(('Connected to Messaging Client '+theWorker.config.message_queue).green);
 			callback();
-		});
-		messagingClient.on('error', function(err) {
-			console.log('Messaging client not available.'.red+' Trying to reconnect.'+err);
 		});
 	}
 ], function() {

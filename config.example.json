@@ -1,17 +1,21 @@
 {
   "main_database": "ElasticSearch",
-  "message_queue": "Kafka",
+  "message_queue": "kafka",
   "ElasticSearch": {
 	"host": "10.0.0.1",
 	"port": 9200,
 	"index": "default"
   },
-  "Kafka": {
+  "kafka": {
     "host": "10.0.0.2",
     "port": 2181
   },
   "redis": {
 	"host": "10.0.0.3",
 	"port": 6379
+  },
+  "azure_servicebus": {
+	"connection_string": "azure serviceBus connection string",
+	"polling_interval": 50
   }
 }
