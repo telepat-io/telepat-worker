@@ -74,10 +74,7 @@ async.series([
 		var messagingClient = new Models[theWorker.config.message_queue](messageQueueConfig, 'telepat-worker-'+workerType+'-'+workerIndex, workerType);
 		theWorker.setMessagingClient(messagingClient);
 
-		messagingClient.onReady(function() {
-			console.log(('Connected to Messaging Client '+theWorker.config.message_queue).green);
-			callback();
-		});
+		messagingClient.onReady(callback);
 	}
 ], function() {
 	theWorker.ready();
