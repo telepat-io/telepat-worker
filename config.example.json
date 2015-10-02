@@ -17,5 +17,10 @@
   "azure_servicebus": {
 	"connection_string": "azure serviceBus connection string",
 	"polling_interval": 50
+  },
+  "amqp": {
+	"host": "10.0.0.4",
+	"user": "telepat",
+	"password": "password"
   }
 }
