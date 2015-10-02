@@ -44,6 +44,11 @@ switch (workerType) {
 	}
 }
 
+if (!Models[theWorker.config.main_database]) {
+	console.log('Unable to load'.red+' "'+theWorker.config.main_database+'" main database: not found.\nAborting...');
+	process.exit(-1);
+}
+
 Models.Application.datasource = new Models.Datasource();
 Models.Application.datasource.setMainDatabase(new Models[theWorker.config.main_database](theWorker.config[theWorker.config.main_database]));
 
@@ -69,6 +74,12 @@ async.series([
 	},
 	function(callback) {
 		console.log('Waiting for Messaging Client connection.');
+
+		if (!Models[theWorker.config.message_queue]) {
+			console.log('Unable to load'.red+' "'+theWorker.config.message_queue+'" messaging queue: not found. Aborting...');
+			process.exit(-1);
+		}
+
 		var messageQueueConfig = theWorker.config[theWorker.config.message_queue];
 
 		var messagingClient = new Models[theWorker.config.message_queue](messageQueueConfig, 'telepat-worker-'+workerType+'-'+workerIndex, workerType);
