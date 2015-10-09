@@ -1,3 +1,8 @@
+# 0.2.5
+
+* All applications are loaded on boot up
+* Socket transport should now all receive 1 message from the writer (broadcast)
+
 # 0.2.4
 
 * Fixed update_friends worker
