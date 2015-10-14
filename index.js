@@ -82,6 +82,7 @@ async.series([
 
 		var messageQueueConfig = theWorker.config[theWorker.config.message_queue];
 
+		messageQueueConfig = messageQueueConfig || {broadcast: theWorker.broadcast};
 		var messagingClient = new Models[theWorker.config.message_queue](messageQueueConfig, 'telepat-worker-'+workerType+'-'+workerIndex, workerType);
 		theWorker.setMessagingClient(messagingClient);
 
