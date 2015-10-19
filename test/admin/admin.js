@@ -1,4 +1,5 @@
 var common = require('../common');
+var async = require('async');
 var request = common.request;
 var should = common.should;
 var url = common.url;
@@ -421,34 +422,44 @@ describe('1.1.Admin', function() {
 
 		this.timeout(100*DELAY);
 
-		request(url)
-			.delete('/admin/delete')
-			.set('Content-type','application/json')
-			.set('Authorization', authValue)
-			.send()
-			.end(function(err, res) {
+		async.waterfall([
+			function(callback) {
+				request(url)
+					.delete('/admin/delete')
+					.set('Content-type','application/json')
+					.set('Authorization', authValue)
+					.send()
+					.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
-
+						res.statusCode.should.be.equal(200);
+						callback(null);
+					});
+			},
+			function(callback) {
 				request(url)
 					.post('/admin/add')
 					.send(admin)
 					.end(function(err, res) {
 
 						res.statusCode.should.be.equal(200);
-
-						request(url)
-							.post('/admin/login')
-							.send(admin)
-							.end(function(err, res) {
-
-								authValue = 'Bearer ' + res.body.content.token;
-								adminAuth = authValue;
-								res.statusCode.should.be.equal(200);
-								done();
-							});
+						callback(null);
 					});
-			});
+			},
+			function(callback) {
+				request(url)
+					.post('/admin/login')
+					.send(admin)
+					.end(function(err, res) {
+
+						authValue = 'Bearer ' + res.body.content.token;
+						adminAuth = authValue;
+						res.statusCode.should.be.equal(200);
+						callback();
+						done();
+					});
+			}
+		]);
+
 	});
 });
 
