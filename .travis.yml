@@ -24,13 +24,14 @@ before_install:
   - kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic android_transport --zookeeper localhost:2181
   - kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ios_transport --zookeeper localhost:2181
   - kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic sockets_transport --zookeeper localhost:2181
-  - git clone https://github.com/telepat-io/telepat-api.git && cd telepat-api && npm install
+  - nohup bash -c "git clone https://github.com/telepat-io/telepat-api.git && cd telepat-api && npm install"
   - npm install -g telepat-cli
   - npm install -g forever
   - npm install -g codeclimate-test-reporter
 before_script:
   - telepat configure elasticsearch
-  - npm start
+  - nohup bash -c "cd telepat-api && npm start &"
+  - sleep 30
   - 'echo "script.disable_dynamic: false" | sudo tee -a /etc/elasticsearch/elasticsearch.yml'
   - 'echo "script.groovy.sandbox.enable: true" | sudo tee -a /etc/elasticsearch/elasticsearch.yml'
 after_script:
