@@ -30,7 +30,7 @@ before_install:
   - npm install -g codeclimate-test-reporter
 before_script:
   - telepat configure elasticsearch
-  - cd telepat-api && npm start
+  - npm start
   - 'echo "script.disable_dynamic: false" | sudo tee -a /etc/elasticsearch/elasticsearch.yml'
   - 'echo "script.groovy.sandbox.enable: true" | sudo tee -a /etc/elasticsearch/elasticsearch.yml'
 after_script:
