@@ -1,3 +1,5 @@
+var async = require('async');
+
 function importTest(name, path) {
 
 	describe(name, function () {
@@ -6,13 +8,10 @@ function importTest(name, path) {
 }
 
 function containsString (substring, string) {
-	//console.log(substring);
-	if (string)
-	if (string.indexOf(substring) > -1) {
-		//console.log(string);
+
+	if (string && string.indexOf(substring) > -1) {
 		return string;
 	}
-
 }
 
 function deleteRequireCache (toDelete, cache){
@@ -32,7 +31,7 @@ describe('Worker', function () {
 
 	before(function (done) {
 
-		this.timeout(15000);
+		this.timeout(60000);
 
 		process.argv[3] = "-t";
 
@@ -41,37 +40,47 @@ describe('Worker', function () {
 
 		var workerTypes = [ 'aggregation', 'write', 'android_transport', 'ios_transport', 'sockets_transport' ];
 
-		process.argv[4] = workerTypes[0];
-		aggregation = require('../index');
-
-		setTimeout(function(){},3000);
-
-		deleteRequireCache('worker/index.js',require.cache);
-		process.argv[4] = workerTypes[1];
-		write = require('../index');
-
-		/*deleteRequireCache('worker/index.js',require.cache);
-		process.argv[4] = workerTypes[2];
-		track = require('../index');
-
-		deleteRequireCache('worker/index.js',require.cache);
-		process.argv[4] = workerTypes[3];
-		android_transport = require('../index');
-
-		deleteRequireCache('worker/index.js',require.cache);
-		process.argv[4] = workerTypes[4];
-		ios_transport = require('../index');
-
-		deleteRequireCache('worker/index.js',require.cache);
-		process.argv[4] = workerTypes[5];
-		sockets_transport = require('../index');*/
-
-		setTimeout(done,3000);
+		async.series([
+			function(callback){
+				process.argv[4] = workerTypes[0];
+				aggregation = require('../index');
+				setTimeout(callback,3000);
+			},
+			function(callback){
+				deleteRequireCache('worker/index.js',require.cache);
+				process.argv[4] = workerTypes[1];
+				write = require('../index');
+				setTimeout(callback,3000);
+			},
+			function(callback){
+				deleteRequireCache('worker/index.js',require.cache);
+				process.argv[4] = workerTypes[2];
+				android_transport = require('../index');
+				setTimeout(callback,3000);
+			},
+			function(callback){
+				deleteRequireCache('worker/index.js',require.cache);
+				process.argv[4] = workerTypes[3];
+				ios_transport = require('../index');
+				setTimeout(callback,3000);
+			},
+			function(callback){
+				deleteRequireCache('worker/index.js',require.cache);
+				process.argv[4] = workerTypes[4];
+				process.env.TP_SCKT_PORT = 8080;
+				sockets_transport = require('../index');
+				setTimeout(function(){
+					callback();
+					done();
+				},4000);
+			}]);
 	});
 
-	importTest("1.Admin", './admin/admin');
-	importTest("2.Context", './context/context');
-	importTest("3.Device", './device/device');
-	importTest("4.Object", './object/object');
-	importTest("5.User", './user/user');
+	describe('Routes', function () {
+		importTest("1.Admin", './admin/admin');
+		importTest("2.Context", './context/context');
+		importTest("3.Device", './device/device');
+		importTest("4.Object", './object/object');
+		importTest("5.User", './user/user');
+	});
 });
