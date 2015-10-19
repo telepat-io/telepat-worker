@@ -3,8 +3,8 @@ services:
   - elasticsearch
   - redis
 addons:
-	code_climate:
-		repo_token: 91236e484eba6334801432341b099b878715143f54199c53af70b1a836e05109
+  code_climate:
+    repo_token: 91236e484eba6334801432341b099b878715143f54199c53af70b1a836e05109
 notifications:
   slack: appscend:L6jJEK0C6jJQkWr5XPMsDjdv
 env:
