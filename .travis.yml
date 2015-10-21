@@ -13,11 +13,13 @@ before_install:
   - npm install -g telepat-cli
   - npm install -g codeclimate-test-reporter
   - npm install -g istanbul
+  - npm install -g mocha
 install:
   - sudo rabbitmq-plugins enable rabbitmq_management
   - sudo service rabbitmq-server restart
 before_script:
   - sudo rabbitmqctl set_permissions guest "^guest-.*" ".*" ".*"
+  - sudo service rabbitmq-server restart
   - telepat configure elasticsearch
   - nohup bash -c "cd telepat-api && npm start &"
   - sleep 30
