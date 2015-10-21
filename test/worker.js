@@ -33,7 +33,7 @@ describe('Worker', function () {
 
 	before(function (done) {
 
-		this.timeout(80000);
+		this.timeout(180000);
 
 		process.argv[3] = "-t";
 
@@ -80,7 +80,7 @@ describe('Worker', function () {
 				setTimeout(function(){
 					callback();
 					done();
-				},6000);
+				},30000);
 			}]);
 	});
 
