@@ -8,11 +8,6 @@ addons:
     repo_token: 91236e484eba6334801432341b099b878715143f54199c53af70b1a836e05109
 notifications:
   slack: appscend:L6jJEK0C6jJQkWr5XPMsDjdv
-env:
-  global:
-  - ZOOKEEPER_PEERS=localhost:2181
-  - KAFKA_PEERS=localhost:9092
-  - KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
 before_install:
   - nohup bash -c "git clone https://github.com/telepat-io/telepat-api.git && cd telepat-api && npm install"
   - npm install -g telepat-cli
@@ -28,3 +23,4 @@ after_script:
 node_js:
   - "0.10"
   - "0.12"
+sudo: false
