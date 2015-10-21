@@ -19,7 +19,7 @@ install:
   - sudo rabbitmq-plugins enable rabbitmq_management
   - sudo service rabbitmq-server restart
 before_script:
-  - sudo rabbitmqctl set_permissions guest "^guest-.*" ".*" ".*"
+  - sudo rabbitmqctl set_permissions guest ".*" ".*" ".*"
   - sudo service rabbitmq-server restart
   - telepat configure elasticsearch
   - nohup bash -c "cd telepat-api && npm start &"
