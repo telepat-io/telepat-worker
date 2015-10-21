@@ -52,10 +52,9 @@ describe('Worker', function () {
 				deleteRequireCache('worker/index.js',require.cache);
 				process.argv[4] = workerTypes[1];
 				var write = require('../index');
-				done();
 				setTimeout(callback,1000);
 			},
-			/*function(callback){
+			function(callback){
 				deleteRequireCache('worker/index.js',require.cache);
 				process.argv[4] = workerTypes[2];
 				var update_friends = require('../index');
@@ -82,7 +81,7 @@ describe('Worker', function () {
 					callback();
 					done();
 				},6000);
-			}*/]);
+			}]);
 	});
 
 	describe('Routes', function () {
