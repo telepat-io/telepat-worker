@@ -18,6 +18,7 @@ before_install:
   - npm install -g istanbul
   - npm install -g mocha
   - npm install -g should
+  - npm install should
   - npm install -g assert
   - npm install -g supertest
   - npm install -g common
