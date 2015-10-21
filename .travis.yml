@@ -12,7 +12,11 @@ before_install:
   - nohup bash -c "git clone https://github.com/telepat-io/telepat-api.git && cd telepat-api && npm install"
   - npm install -g telepat-cli
   - npm install -g codeclimate-test-reporter
+install:
+  - sudo rabbitmq-plugins enable rabbitmq_management
+  - sudo service rabbitmq-server restart
 before_script:
+  - rabbitmqctl set_permissions -p / quest "^quest-.*" ".*" ".*"
   - telepat configure elasticsearch
   - nohup bash -c "cd telepat-api && npm start &"
   - sleep 30
