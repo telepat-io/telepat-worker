@@ -15,14 +15,13 @@ before_install:
   - nohup bash -c "git clone https://github.com/telepat-io/telepat-api.git && cd telepat-api && npm install"
   - npm install -g telepat-cli
   - npm install -g codeclimate-test-reporter
-  - npm install -g istanbul
-  - npm install -g mocha
-  - npm install -g should
+  - npm install istanbul
+  - npm install mocha
   - npm install should
-  - npm install -g assert
-  - npm install -g supertest
-  - npm install -g common
-  - npm install -g crypto-js
+  - npm install assert
+  - npm install supertest
+  - npm install common
+  - npm install crypto-js
 install:
   - sudo rabbitmq-plugins enable rabbitmq_management
   - sudo service rabbitmq-server restart
