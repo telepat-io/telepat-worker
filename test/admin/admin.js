@@ -432,7 +432,7 @@ describe('1.1.Admin', function() {
 					.end(function(err, res) {
 
 						res.statusCode.should.be.equal(200);
-						callback(null);
+						callback();
 					});
 			},
 			function(callback) {
@@ -442,7 +442,7 @@ describe('1.1.Admin', function() {
 					.end(function(err, res) {
 
 						res.statusCode.should.be.equal(200);
-						callback(null);
+						callback();
 					});
 			},
 			function(callback) {
