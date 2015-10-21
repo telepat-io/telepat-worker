@@ -23,4 +23,3 @@ after_script:
 node_js:
   - "0.10"
   - "0.12"
-sudo: false
