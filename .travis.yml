@@ -15,7 +15,6 @@ before_install:
   - nohup bash -c "git clone https://github.com/telepat-io/telepat-api.git && cd telepat-api && npm install"
   - npm install -g telepat-cli
   - npm install -g codeclimate-test-reporter
-install:
   - sudo rabbitmq-plugins enable rabbitmq_management
   - sudo service rabbitmq-server restart
 before_script:
@@ -26,7 +25,6 @@ before_script:
   - sleep 30
   - 'echo "script.disable_dynamic: false" | sudo tee -a /etc/elasticsearch/elasticsearch.yml'
   - 'echo "script.groovy.sandbox.enable: true" | sudo tee -a /etc/elasticsearch/elasticsearch.yml'
-  - npm install
 after_script:
     - codeclimate-test-reporter < coverage/lcov.info
 node_js:

@@ -112,7 +112,7 @@ it('3.2 should return a success response to indicate device successfully registe
 		.post('/device/register')
 		.set('X-BLGREQ-SIGN', appIDsha256)
 		.set('X-BLGREQ-UDID', '')
-		.set('X-BLGREQ-APPID',1)
+		.set('X-BLGREQ-APPID',appID)
 		.send(clientRequest)
 		.end(function(err, res) {
 
@@ -144,7 +144,7 @@ it('3.3 should return a success response to indicate device successfully updated
 		.post('/device/register')
 		.set('X-BLGREQ-SIGN', appIDsha256)
 		.set('X-BLGREQ-UDID', deviceIdentifier)
-		.set('X-BLGREQ-APPID',1)
+		.set('X-BLGREQ-APPID',appID)
 		.send(clientRequest)
 		.end(function(err, res) {
 
@@ -175,7 +175,7 @@ it('3.4 should return an error response to indicate device successfully register
 		.post('/device/register')
 		.set('X-BLGREQ-SIGN', appIDsha256)
 		.set('X-BLGREQ-UDID', '')
-		.set('X-BLGREQ-APPID',1)
+		.set('X-BLGREQ-APPID',appID)
 		.send(clientRequest)
 		.end(function(err, res) {
 
@@ -199,7 +199,7 @@ it('3.5 should return an error response to indicate device NOT successfully regi
 		.post('/device/register')
 		.set('X-BLGREQ-SIGN', appIDsha256)
 		.set('X-BLGREQ-UDID', '')
-		.set('X-BLGREQ-APPID',1)
+		.set('X-BLGREQ-APPID',appID)
 		.send(clientRequest)
 		.end(function(err, res) {
 
@@ -217,7 +217,7 @@ it('3.6 should return an error response to indicate device NOT successfully regi
 		.post('/device/register')
 		.set('X-BLGREQ-SIGN', appIDsha256)
 		.set('X-BLGREQ-UDID', '')
-		.set('X-BLGREQ-APPID',1)
+		.set('X-BLGREQ-APPID',appID)
 		.send()
 		.end(function(err, res) {
 
@@ -235,7 +235,7 @@ it('3.7 should return an error response to indicate device NOT successfully regi
 		.post('/device/register')
 		.set('X-BLGREQ-SIGN', appIDsha256)
 		.set('X-BLGREQ-UDID', 'invalidUDID')
-		.set('X-BLGREQ-APPID',1)
+		.set('X-BLGREQ-APPID',appID)
 		.send()
 		.end(function(err, res) {
 
