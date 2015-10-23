@@ -315,8 +315,19 @@ it('5.7 should return an error response to indicate that the user info was NOT r
 										.send()
 										.end(function(err, res) {
 
-											res.statusCode.should.be.equal(404);
-											res.body.code.should.be.equal('023');
+											try{
+												res.statusCode.should.be.equal(404);
+												res.body.code.should.be.equal('023');
+											}
+											catch(assertError){
+												if(res){
+													console.log(res.body);
+												}
+												else{
+													console.log(err);
+												}
+											}
+
 											done();
 										});
 								}, 20*DELAY);
@@ -891,7 +902,18 @@ it('5.31 should return a success response to indicate that the user was deleted'
 				.send(subclientrequest)
 				.end(function(err, res) {
 
-					res.statusCode.should.be.equal(202);
+					try{
+						res.statusCode.should.be.equal(202);
+					}
+					catch(assertError){
+						if(res){
+							console.log(res.body);
+						}
+						else{
+							console.log(err);
+						}
+					}
+
 					done();
 				});
 		});

@@ -193,6 +193,7 @@ describe('Function', function() {
 					.set('Authorization', authValue)
 					.send(clientRequest)
 					.end(function (err, res) {
+						console.log(res.body);
 						appID = res.body.content.id;
 						callback();
 					});
@@ -205,6 +206,7 @@ describe('Function', function() {
 					.set('X-BLGREQ-APPID', appID )
 					.send(schemaClientRequest)
 					.end(function (err, res) {
+						console.log(res.body);
 						callback();
 					});
 			},
@@ -265,7 +267,7 @@ describe('Function', function() {
 					.set('X-BLGREQ-UDID', deviceIdentification )
 					.send(userclientrequest)
 					.end(function(err, res) {
-console.log(res.body);
+
 						setTimeout(callback,3000);
 					});
 			},
@@ -279,7 +281,7 @@ console.log(res.body);
 					.set('X-BLGREQ-UDID', deviceIdentification )
 					.send(userclientrequest)
 					.end(function(err, res) {
-console.log(res.body);
+
 						userToken = res.body.content.token;
 						userAuthValue = 'Bearer ' + userToken;
 						callback();
@@ -319,7 +321,7 @@ console.log(res.body);
 
 				var subclientrequest = {
 					channel: {
-						context: "context",
+						context: contextID,
 						model: "user"
 					}
 				};
@@ -358,8 +360,13 @@ console.log(res.body);
 			done();
 		});
 
-		messagingClient.send([
-			'{"op":"add","object":{"email":"user821036@example.com","password":"$2a$10$N9qo8uLOickgx2ZMRZoMye6lvXrppdmLBtQV62dantw4i4qTnUuL2","name":"John Smith","friends":[],"type":"user","devices":["a76c9e3f-5451-4694-9613-26a5a564c81c"]},"applicationId":"9aec6313-3a77-48f3-9df2-1dfdcc98b711","isUser":true}'
-		], 'aggregation', function(){});
+		 messagingClient.onReady(function(){
+
+			 messagingClient.send([
+				 '{"op":"add","object":{"email":"user821036@example.com","password":"$2a$10$N9qo8uLOickgx2ZMRZoMye6lvXrppdmLBtQV62dantw4i4qTnUuL2","name":"John Smith","friends":[],"type":"user","devices":["a76c9e3f-5451-4694-9613-26a5a564c81c"]},"applicationId":"9aec6313-3a77-48f3-9df2-1dfdcc98b711","isUser":true}'
+			 ], 'aggregation', function(){});
+
+		 });
+
 	});
 });

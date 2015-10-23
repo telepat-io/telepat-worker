@@ -397,8 +397,19 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('038');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('038');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -413,7 +424,18 @@ describe('1.1.Admin', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(401);
+				try{
+					res.statusCode.should.be.equal(401);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -431,7 +453,18 @@ describe('1.1.Admin', function() {
 					.send()
 					.end(function(err, res) {
 
-						res.statusCode.should.be.equal(200);
+						try{
+							res.statusCode.should.be.equal(200);
+						}
+						catch(assertError){
+							if(res){
+								console.log(res.body);
+							}
+							else{
+								console.log(err);
+							}
+						}
+
 						callback();
 					});
 			},
@@ -441,7 +474,18 @@ describe('1.1.Admin', function() {
 					.send(admin)
 					.end(function(err, res) {
 
-						res.statusCode.should.be.equal(200);
+						try{
+							res.statusCode.should.be.equal(200);
+						}
+						catch(assertError){
+							if(res){
+								console.log(res.body);
+							}
+							else{
+								console.log(err);
+							}
+						}
+
 						callback();
 					});
 			},
@@ -451,9 +495,20 @@ describe('1.1.Admin', function() {
 					.send(admin)
 					.end(function(err, res) {
 
-						authValue = 'Bearer ' + res.body.content.token;
-						adminAuth = authValue;
-						res.statusCode.should.be.equal(200);
+						try{
+							authValue = 'Bearer ' + res.body.content.token;
+							adminAuth = authValue;
+							res.statusCode.should.be.equal(200);
+						}
+						catch(assertError){
+							if(res){
+								console.log(res.body);
+							}
+							else{
+								console.log(err);
+							}
+						}
+
 						callback();
 						done();
 					});
@@ -777,8 +832,19 @@ describe('1.2.App', function() {
 					.send()
 					.end(function(err, res) {
 
-						res.statusCode.should.be.equal(200);
-						res.body.content.should.be.equal('App removed');
+						try{
+							res.statusCode.should.be.equal(200);
+							res.body.content.should.be.equal('App removed');
+						}
+						catch(assertError){
+							if(res){
+								console.log(res.body);
+							}
+							else{
+								console.log(err);
+							}
+						}
+
 						done();
 					});
 			});
@@ -958,10 +1024,19 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				if(res){
+				try{
 					res.body.code.should.be.equal('019');
 					res.statusCode.should.be.equal(404);
 				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1104,10 +1179,21 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				var objectKey = Object.keys(res.body.content)[0];
-				contextID = res.body.content.id;
-				(res.body.content[objectKey].name == clientrequest.name).should.be.ok;
-				res.statusCode.should.be.equal(200);
+				try{
+					var objectKey = Object.keys(res.body.content)[0];
+					contextID = res.body.content.id;
+					(res.body.content[objectKey].name == clientrequest.name).should.be.ok;
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1122,8 +1208,19 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('005');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('005');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1144,7 +1241,18 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				try{
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1161,8 +1269,19 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('004');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1229,7 +1348,18 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				try{
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1257,8 +1387,19 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('020');
-				res.statusCode.should.be.equal(404);
+				try{
+					res.body.code.should.be.equal('020');
+					res.statusCode.should.be.equal(404);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1280,8 +1421,19 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('038');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('038');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1298,8 +1450,19 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('005');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('005');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1321,8 +1484,19 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('038');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('038');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1350,8 +1524,19 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('004');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1379,8 +1564,19 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('012');
-				res.statusCode.should.be.equal(401);
+				try{
+					res.body.code.should.be.equal('012');
+					res.statusCode.should.be.equal(401);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1401,8 +1597,19 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('020');
-				res.statusCode.should.be.equal(404);
+				try{
+					res.body.code.should.be.equal('020');
+					res.statusCode.should.be.equal(404);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1423,9 +1630,20 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('020');
-				res.statusCode.should.be.equal(404);
-				res.body.message.should.be.equal("Context not found");
+				try{
+					res.body.code.should.be.equal('020');
+					res.statusCode.should.be.equal(404);
+					res.body.message.should.be.equal("Context not found");
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1442,8 +1660,19 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('004');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1460,8 +1689,19 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
-				res.body.content.should.have.length(1);
+				try{
+					res.statusCode.should.be.equal(200);
+					res.body.content.should.have.length(1);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1478,8 +1718,19 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
-				res.body.content.should.have.length(1);
+				try{
+					res.statusCode.should.be.equal(200);
+					res.body.content.should.have.length(1);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1518,8 +1769,19 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
-				res.body.content.should.be.equal('Context removed');
+				try{
+					res.statusCode.should.be.equal(200);
+					res.body.content.should.be.equal('Context removed');
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1605,7 +1867,18 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				try{
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1690,8 +1963,19 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('004');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1708,7 +1992,18 @@ describe('1.4.Schema', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				try{
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1725,7 +2020,18 @@ describe('1.4.Schema', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				try{
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1746,7 +2052,18 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				try{
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1789,8 +2106,19 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('022');
-				res.statusCode.should.be.equal(404);
+				try{
+					res.body.code.should.be.equal('022');
+					res.statusCode.should.be.equal(404);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1811,8 +2139,19 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('004');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1833,8 +2172,19 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('003');
-				res.statusCode.should.be.equal(404);
+				try{
+					res.body.code.should.be.equal('003');
+					res.statusCode.should.be.equal(404);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1890,7 +2240,18 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				try{
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1919,7 +2280,18 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				try{
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1938,8 +2310,19 @@ describe('1.5.User', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('005');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('005');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1964,8 +2347,19 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('038');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('038');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -1989,8 +2383,19 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('038');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('038');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -2020,7 +2425,18 @@ describe('1.5.User', function() {
 						.send(clientrequest)
 						.end(function(err, res) {
 
-							res.statusCode.should.be.equal(200);
+							try{
+								res.statusCode.should.be.equal(200);
+							}
+							catch(assertError){
+								if(res){
+									console.log(res.body);
+								}
+								else{
+									console.log(err);
+								}
+							}
+
 							done();
 						});
 				}, 20*DELAY);
@@ -2066,8 +2482,19 @@ describe('1.5.User', function() {
 						.send(clientrequest)
 						.end(function(err, res) {
 
-							res.body.code.should.be.equal('023');
-							res.statusCode.should.be.equal(404);
+							try{
+								res.body.code.should.be.equal('023');
+								res.statusCode.should.be.equal(404);
+							}
+							catch(assertError){
+								if(res){
+									console.log(res.body);
+								}
+								else{
+									console.log(err);
+								}
+							}
+
 							done();
 						});
 				}, 20*DELAY);
@@ -2093,8 +2520,19 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('004');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -2120,8 +2558,19 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('011');
-				res.statusCode.should.be.equal(404);
+				try{
+					res.body.code.should.be.equal('011');
+					res.statusCode.should.be.equal(404);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -2151,8 +2600,19 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('023');
-				res.statusCode.should.be.equal(404);
+				try{
+					res.body.code.should.be.equal('023');
+					res.statusCode.should.be.equal(404);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -2181,8 +2641,19 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				try{
+					res.body.code.should.be.equal('004');
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -2201,7 +2672,18 @@ describe('1.5.User', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				try{
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -2224,7 +2706,18 @@ describe('1.5.User', function() {
 			.send(clientRequest)
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				try{
+					res.statusCode.should.be.equal(200);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -2243,9 +2736,17 @@ describe('1.5.User', function() {
 			.send()
 			.end(function(err, res) {
 
-				if(res) {
+				try{
 					res.body.code.should.be.equal('011');
 					res.statusCode.should.be.equal(404);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
 				}
 
 				done();
@@ -2266,10 +2767,19 @@ describe('1.5.User', function() {
 			.send()
 			.end(function(err, res) {
 
-				if(res) {
+				try{
 					res.body.content.should.not.be.empty;
 					res.statusCode.should.be.equal(200);
 				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -2292,10 +2802,19 @@ describe('1.5.User', function() {
 			.send(clientRequest)
 			.end(function(err, res) {
 
-				if(res) {
+				try{
 					res.body.content.should.not.be.empty;
 					res.statusCode.should.be.equal(200);
 				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});
@@ -2314,10 +2833,19 @@ describe('1.5.User', function() {
 			.send()
 			.end(function(err, res) {
 
-				if(res) {
+				try{
 					res.body.code.should.be.equal('011');
 					res.statusCode.should.be.equal(404);
 				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+				}
+
 				done();
 			});
 	});

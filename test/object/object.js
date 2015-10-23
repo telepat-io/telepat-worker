@@ -1897,7 +1897,18 @@ it('4.52 should return a success response to indicate that a object has been del
 		.send(clientrequest)
 		.end(function(err, res) {
 
-			res.statusCode.should.be.equal(202);
+			try{
+				res.statusCode.should.be.equal(202);
+			}
+			catch(assertError){
+				if(res){
+					console.log(res.body);
+				}
+				else{
+					console.log(err);
+				}
+			}
+
 			done();
 		});
 });
@@ -1947,8 +1958,19 @@ it('4.54 should return an error response to indicate that the object id was miss
 		.send(clientrequest)
 		.end(function(err, res) {
 
-			res.body.code.should.be.equal('004');
-			res.statusCode.should.be.equal(400);
+			try{
+				res.body.code.should.be.equal('004');
+				res.statusCode.should.be.equal(400);
+			}
+			catch(assertError){
+				if(res){
+					console.log(res.body);
+				}
+				else{
+					console.log(err);
+				}
+			}
+
 			done();
 		});
 });
@@ -2022,8 +2044,19 @@ it('4.57 should return an error response to indicate that the object was not del
 		.send(clientrequest)
 		.end(function(err, res) {
 
-			res.body.code.should.be.equal('004');
-			res.statusCode.should.be.equal(400);
+			try{
+				res.body.code.should.be.equal('004');
+				res.statusCode.should.be.equal(400);
+			}
+			catch(assertError){
+				if(res){
+					console.log(res.body);
+				}
+				else{
+					console.log(err);
+				}
+			}
+
 			done();
 		});
 });
