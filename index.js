@@ -44,8 +44,16 @@ switch (workerType) {
 	}
 }
 
+if (Models[theWorker.config.logger]) {
+	Models.Application.logger = new Models[theWorker.config.logger](theWorker.name,
+		theWorker.config[theWorker.config.logger]);
+} else {
+	Models.Application.logger = new Models['console_logger'](theWorker.name);
+}
+
 if (!Models[theWorker.config.main_database]) {
-	console.log('Unable to load'.red+' "'+theWorker.config.main_database+'" main database: not found.\nAborting...');
+	Models.Application.logger.emergency('Unable to load "'+theWorker.config.main_database+
+		'" main database: not found. Aborting...');
 	process.exit(-1);
 }
 
@@ -64,19 +72,18 @@ async.series([
 
 		Models.Application.redisClient = redis.createClient(theWorker.config.redis.port, theWorker.config.redis.host);
 		Models.Application.redisClient.on('error', function(err) {
-			console.log('Failed'.bold.red+' connecting to Redis "'+theWorker.config.redis.host+'": '+err.message);
-			console.log('Retrying...');
+			Models.Application.logger.error('Failed connecting to Redis "'+
+				theWorker.config.redis.host+'": '+err.message+'. Retrying...');
 		});
 		Models.Application.redisClient.on('ready', function() {
-			console.log('Client connected to Redis.'.green);
+			Models.Application.logger.info('Client connected to Redis.');
 			callback();
 		});
 	},
 	function(callback) {
-		console.log('Waiting for Messaging Client connection.');
-
 		if (!Models[theWorker.config.message_queue]) {
-			console.log('Unable to load'.red+' "'+theWorker.config.message_queue+'" messaging queue: not found. Aborting...');
+			Models.Application.logger.emergency('Unable to load "'+theWorker.config.message_queue+
+				'" messaging queue: not found. Aborting...');
 			process.exit(-1);
 		}
 
