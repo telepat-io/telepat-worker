@@ -2,7 +2,6 @@ language: node_js
 services:
   - elasticsearch
   - redis
-  - rabbitmq
 addons:
   code_climate:
     repo_token: 91236e484eba6334801432341b099b878715143f54199c53af70b1a836e05109
@@ -10,16 +9,29 @@ notifications:
   slack: appscend:L6jJEK0C6jJQkWr5XPMsDjdv
 env:
   global:
+    - ZOOKEEPER_PEERS=localhost:2181
+    - KAFKA_PEERS=localhost:9092
+    - KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
     - CODECLIMATE_REPO_TOKEN: 7c04f55c7ed08e2c694492e9b39cd73e5cc9bedce02d0a372f3101dc598dcfaa
 before_install:
+  - wget http://www.us.apache.org/dist/kafka/0.8.2.1/kafka_2.10-0.8.2.1.tgz -O kafka.tgz
+  - mkdir -p kafka && tar xzf kafka.tgz -C kafka --strip-components 1
+  - nohup bash -c "cd kafka && bin/zookeeper-server-start.sh config/zookeeper.properties &"
+  - nohup bash -c "cd kafka && bin/kafka-server-start.sh config/server.properties &"
+  - sleep 5
+  - kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic aggregation --zookeeper localhost:2181
+  - kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic write --zookeeper localhost:2181
+  - kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic update_friends --zookeeper localhost:2181
+  - kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic android_transport --zookeeper localhost:2181
+  - kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic ios_transport --zookeeper localhost:2181
+  - kafka/bin/kafka-topics.sh --create --partitions 1 --replication-factor 1 --topic sockets_transport --zookeeper localhost:2181
   - nohup bash -c "git clone https://github.com/telepat-io/telepat-api.git && cd telepat-api && npm install"
   - npm install -g telepat-cli
   - npm install -g codeclimate-test-reporter
-  - sudo rabbitmq-plugins enable rabbitmq_management
-  - sudo service rabbitmq-server restart
+install:
+  - npm install
+  - nohup bash -c "cd node_modules && sudo rm -r telepat-models && git clone https://github.com/telepat-io/telepat-models.git && cd telepat-models && git checkout develop && npm install"
 before_script:
-  - sudo rabbitmqctl set_permissions guest ".*" ".*" ".*"
-  - sudo service rabbitmq-server restart
   - telepat configure elasticsearch
   - nohup bash -c "cd telepat-api && npm start &"
   - sleep 30

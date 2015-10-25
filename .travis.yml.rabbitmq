@@ -1,0 +1,32 @@
+language: node_js
+services:
+  - elasticsearch
+  - redis
+  - rabbitmq
+addons:
+  code_climate:
+    repo_token: 91236e484eba6334801432341b099b878715143f54199c53af70b1a836e05109
+notifications:
+  slack: appscend:L6jJEK0C6jJQkWr5XPMsDjdv
+env:
+  global:
+    - CODECLIMATE_REPO_TOKEN: 7c04f55c7ed08e2c694492e9b39cd73e5cc9bedce02d0a372f3101dc598dcfaa
+before_install:
+  - nohup bash -c "git clone https://github.com/telepat-io/telepat-api.git && cd telepat-api && npm install"
+  - npm install -g telepat-cli
+  - npm install -g codeclimate-test-reporter
+  - sudo rabbitmq-plugins enable rabbitmq_management
+  - sudo service rabbitmq-server restart
+before_script:
+  - sudo rabbitmqctl set_permissions guest ".*" ".*" ".*"
+  - sudo service rabbitmq-server restart
+  - telepat configure elasticsearch
+  - nohup bash -c "cd telepat-api && npm start &"
+  - sleep 30
+  - 'echo "script.disable_dynamic: false" | sudo tee -a /etc/elasticsearch/elasticsearch.yml'
+  - 'echo "script.groovy.sandbox.enable: true" | sudo tee -a /etc/elasticsearch/elasticsearch.yml'
+after_script:
+    - codeclimate-test-reporter < coverage/lcov.info
+node_js:
+  - "0.10"
+  - "0.12"

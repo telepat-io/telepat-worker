@@ -335,7 +335,7 @@ describe('Function', function() {
 					.set('Authorization', userAuthValue )
 					.send(subclientrequest)
 					.end(function(err, res) {
-console.log(res.body);
+//console.log(res.body);
 						callback();
 						done();
 					});
@@ -362,6 +362,7 @@ console.log(res.body);
 
 		 messagingClient.onReady(function(){
 
+			 console.log('messagingClient.onReady');
 			 messagingClient.send([
 				 '{"op":"add","object":{"email":"user821036@example.com","password":"$2a$10$N9qo8uLOickgx2ZMRZoMye6lvXrppdmLBtQV62dantw4i4qTnUuL2","name":"John Smith","friends":[],"type":"user","devices":["a76c9e3f-5451-4694-9613-26a5a564c81c"]},"applicationId":"9aec6313-3a77-48f3-9df2-1dfdcc98b711","isUser":true}'
 			 ], 'aggregation', function(){});
