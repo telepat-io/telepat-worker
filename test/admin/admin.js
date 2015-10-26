@@ -434,6 +434,7 @@ describe('1.1.Admin', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -463,6 +464,7 @@ describe('1.1.Admin', function() {
 							else{
 								console.log(err);
 							}
+							throw (assertError);
 						}
 
 						callback();
@@ -484,6 +486,7 @@ describe('1.1.Admin', function() {
 							else{
 								console.log(err);
 							}
+							throw (assertError);
 						}
 
 						callback();
@@ -507,6 +510,7 @@ describe('1.1.Admin', function() {
 							else{
 								console.log(err);
 							}
+							throw (assertError);
 						}
 
 						callback();
@@ -800,8 +804,20 @@ describe('1.2.App', function() {
 			.send(clientrequest2)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('011');
-				res.statusCode.should.be.equal(404);
+				try{
+					res.body.code.should.be.equal('011');
+					res.statusCode.should.be.equal(404);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+					throw (assertError);
+				}
+
 				done();
 			});
 	});
@@ -843,6 +859,7 @@ describe('1.2.App', function() {
 							else{
 								console.log(err);
 							}
+							throw (assertError);
 						}
 
 						done();
@@ -1035,6 +1052,7 @@ describe('1.2.App', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1055,9 +1073,19 @@ describe('1.2.App', function() {
 			.send()
 			.end(function(err, res) {
 
-				if(res)
+				try{
 					res.body.code.should.be.equal('005');
-				res.statusCode.should.be.equal(400);
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+					throw (assertError);
+				}
 				done();
 			});
 	});
@@ -1080,9 +1108,19 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				if(res)
+				try{
 					res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+					res.statusCode.should.be.equal(400);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+					throw (assertError);
+				}
 				done();
 			});
 	});
@@ -1104,9 +1142,19 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				if(res)
+				try{
 					res.body.code.should.be.equal('012');
-				res.statusCode.should.be.equal(401);
+					res.statusCode.should.be.equal(401);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+					throw (assertError);
+				}
 				done();
 			});
 	});
@@ -1128,9 +1176,20 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				if(res)
+				try{
 					res.body.code.should.be.equal('018');
-				res.statusCode.should.be.equal(409);
+					res.statusCode.should.be.equal(409);
+				}
+				catch(assertError){
+					if(res){
+						console.log(res.body);
+					}
+					else{
+						console.log(err);
+					}
+					throw (assertError);
+				}
+
 				done();
 			});
 	});
@@ -1192,6 +1251,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1219,6 +1279,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1251,6 +1312,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1280,6 +1342,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1358,6 +1421,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1398,6 +1462,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1432,6 +1497,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1461,6 +1527,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1495,6 +1562,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1535,6 +1603,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1575,6 +1644,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1608,6 +1678,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1642,6 +1713,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1671,6 +1743,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1700,6 +1773,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1729,6 +1803,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1780,6 +1855,7 @@ describe('1.3.Context', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1877,6 +1953,7 @@ describe('1.4.Schema', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -1974,6 +2051,7 @@ describe('1.4.Schema', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2002,6 +2080,7 @@ describe('1.4.Schema', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2030,6 +2109,7 @@ describe('1.4.Schema', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2062,6 +2142,7 @@ describe('1.4.Schema', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2117,6 +2198,7 @@ describe('1.4.Schema', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2150,6 +2232,7 @@ describe('1.4.Schema', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2183,6 +2266,7 @@ describe('1.4.Schema', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2250,6 +2334,7 @@ describe('1.5.User', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2290,6 +2375,7 @@ describe('1.5.User', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2321,6 +2407,7 @@ describe('1.5.User', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2358,6 +2445,7 @@ describe('1.5.User', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2394,6 +2482,7 @@ describe('1.5.User', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2435,6 +2524,7 @@ describe('1.5.User', function() {
 								else{
 									console.log(err);
 								}
+								throw (assertError);
 							}
 
 							done();
@@ -2493,6 +2583,7 @@ describe('1.5.User', function() {
 								else{
 									console.log(err);
 								}
+								throw (assertError);
 							}
 
 							done();
@@ -2531,6 +2622,7 @@ describe('1.5.User', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2778,6 +2870,7 @@ describe('1.5.User', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2813,6 +2906,7 @@ describe('1.5.User', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();
@@ -2844,6 +2938,7 @@ describe('1.5.User', function() {
 					else{
 						console.log(err);
 					}
+					throw (assertError);
 				}
 
 				done();

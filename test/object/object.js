@@ -1907,6 +1907,7 @@ it('4.52 should return a success response to indicate that a object has been del
 				else{
 					console.log(err);
 				}
+				throw (assertError);
 			}
 
 			done();
@@ -1969,6 +1970,7 @@ it('4.54 should return an error response to indicate that the object id was miss
 				else{
 					console.log(err);
 				}
+				throw (assertError);
 			}
 
 			done();
@@ -2055,6 +2057,7 @@ it('4.57 should return an error response to indicate that the object was not del
 				else{
 					console.log(err);
 				}
+				throw (assertError);
 			}
 
 			done();

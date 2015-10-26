@@ -326,6 +326,7 @@ it('5.7 should return an error response to indicate that the user info was NOT r
 												else{
 													console.log(err);
 												}
+												throw (assertError);
 											}
 
 											done();
@@ -912,6 +913,7 @@ it('5.31 should return a success response to indicate that the user was deleted'
 						else{
 							console.log(err);
 						}
+						throw (assertError);
 					}
 
 					done();
