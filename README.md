@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/telepat-io/telepat-worker.svg?branch=develop)](https://travis-ci.org/telepat-io/telepat-worker) [![Test Coverage](https://codeclimate.com/github/telepat-io/telepat-worker/badges/coverage.svg)](https://codeclimate.com/github/telepat-io/telepat-worker/coverage) [![Code Climate](https://codeclimate.com/github/telepat-io/telepat-worker/badges/gpa.svg)](https://codeclimate.com/github/telepat-io/telepat-worker)
+[![Build Status](https://travis-ci.org/telepat-io/telepat-worker.svg?branch=develop-test)](https://travis-ci.org/telepat-io/telepat-worker) [![Test Coverage](https://codeclimate.com/github/telepat-io/telepat-worker/badges/coverage.svg)](https://codeclimate.com/github/telepat-io/telepat-worker/coverage) [![Code Climate](https://codeclimate.com/github/telepat-io/telepat-worker/badges/gpa.svg)](https://codeclimate.com/github/telepat-io/telepat-worker)
 
 # Telepat Workers
 
