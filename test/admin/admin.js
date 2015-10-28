@@ -1,5 +1,5 @@
 var common = require('../common');
-var async = require('async');
+var async = common.async;
 var request = common.request;
 var should = common.should;
 var url = common.url;
@@ -49,12 +49,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				if (err) {
-					throw err;
-					done(err);
-				}
-
-				res.statusCode.should.be.equal(200);
+				common.assertnDebug( { expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -68,8 +63,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('030');
-				res.statusCode.should.be.equal(409);
+				common.assertnDebug([{ expected: '030', result: res.body.code }, { expected: 409, result: res.statusCode }], err, res);
 				done();
 			});
 
@@ -88,8 +82,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -108,8 +101,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -128,8 +120,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -147,8 +138,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -166,8 +156,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('016');
-				res.statusCode.should.be.equal(401);
+				common.assertnDebug([{ expected: '016', result: res.body.code }, { expected: 401, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -186,8 +175,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('016');
-				res.statusCode.should.be.equal(401);
+				common.assertnDebug([{ expected: '016', result: res.body.code }, { expected: 401, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -206,8 +194,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -223,8 +210,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -241,7 +227,7 @@ describe('1.1.Admin', function() {
 				authValue = 'Bearer ' + res.body.content.token;
 				var adminAuth = authValue;
 				admin = res.body.content.user;
-				res.statusCode.should.be.equal(200);
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -257,9 +243,7 @@ describe('1.1.Admin', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
-				res.body.content.email.should.be.equal(admin.email);
-				res.body.content.isAdmin.should.be.equal(true);
+				common.assertnDebug([{ expected: true, result: res.body.content.isAdmin },{ expected: admin.email, result: res.body.content.email }, { expected: 200, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -285,7 +269,7 @@ describe('1.1.Admin', function() {
 			.send(requestBody)
 			.end(function(err, res) {
 
-				res.statusCode.should.be.equal(200);
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -311,8 +295,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('041');
-				res.statusCode.should.be.equal(401);
+				common.assertnDebug([{ expected: '041', result: res.body.code }, { expected: 401, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -337,8 +320,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('013');
-				res.statusCode.should.be.equal(401);
+				common.assertnDebug([{ expected: '013', result: res.body.code }, { expected: 401, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -354,8 +336,7 @@ describe('1.1.Admin', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('005');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '005', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -376,8 +357,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('038');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '038', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -397,19 +377,7 @@ describe('1.1.Admin', function() {
 			.send(admin)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('038');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-				}
-
+				common.assertnDebug([{ expected: '038', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -424,19 +392,7 @@ describe('1.1.Admin', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(401);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug( { expected: 401, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -454,19 +410,7 @@ describe('1.1.Admin', function() {
 					.send()
 					.end(function(err, res) {
 
-						try{
-							res.statusCode.should.be.equal(200);
-						}
-						catch(assertError){
-							if(res){
-								console.log(res.body);
-							}
-							else{
-								console.log(err);
-							}
-							throw (assertError);
-						}
-
+						common.assertnDebug( { expected: 200, result: res.statusCode }, err, res);
 						callback();
 					});
 			},
@@ -476,19 +420,7 @@ describe('1.1.Admin', function() {
 					.send(admin)
 					.end(function(err, res) {
 
-						try{
-							res.statusCode.should.be.equal(200);
-						}
-						catch(assertError){
-							if(res){
-								console.log(res.body);
-							}
-							else{
-								console.log(err);
-							}
-							throw (assertError);
-						}
-
+						common.assertnDebug( { expected: 200, result: res.statusCode }, err, res);
 						callback();
 					});
 			},
@@ -498,21 +430,9 @@ describe('1.1.Admin', function() {
 					.send(admin)
 					.end(function(err, res) {
 
-						try{
-							authValue = 'Bearer ' + res.body.content.token;
-							adminAuth = authValue;
-							res.statusCode.should.be.equal(200);
-						}
-						catch(assertError){
-							if(res){
-								console.log(res.body);
-							}
-							else{
-								console.log(err);
-							}
-							throw (assertError);
-						}
-
+						authValue = 'Bearer ' + res.body.content.token;
+						adminAuth = authValue;
+						common.assertnDebug( { expected: 200, result: res.statusCode }, err, res);
 						callback();
 						done();
 					});
@@ -533,15 +453,20 @@ describe('1.2.App', function() {
 			"keys": [ appKey ]
 		};
 
-		request(url)
-			.post('/admin/app/add')
-			.set('Content-type','application/json')
-			.set('Authorization', authValue)
-			.send(clientrequest)
-			.end(function(err, res) {
+		async.waterfall([
+			function(callback) {
+				request(url)
+					.post('/admin/app/add')
+					.set('Content-type','application/json')
+					.set('Authorization', authValue)
+					.send(clientrequest)
+					.end(function(err, res) {
 
-				appID = res.body.content.id;
-
+						appID = res.body.content.id;
+						callback();
+					});
+			},
+			function(callback) {
 				request(url)
 					.post('/admin/app/add')
 					.set('Content-type', 'application/json')
@@ -550,41 +475,51 @@ describe('1.2.App', function() {
 					.end(function (err, res) {
 
 						appID2 = res.body.content.id;
-
-						request(url)
-							.post('/admin/add')
-							.send(admin2)
-							.end(function (err, res) {
-
-								request(url)
-									.post('/admin/login')
-									.set('Content-type', 'application/json')
-									.send(admin2)
-									.end(function (err, res) {
-
-										token2 = res.body.content.token;
-										authValue2 = 'Bearer ' + token2;
-
-										request(url)
-											.post('/admin/add')
-											.send(admin3)
-											.end(function (err, res) {
-
-												request(url)
-													.post('/admin/login')
-													.set('Content-type', 'application/json')
-													.send(admin3)
-													.end(function (err, res) {
-
-														token3 = res.body.content.token;
-														authValue3 = 'Bearer ' + token3;
-														done();
-													});
-											});
-									});
-							});
+						callback();
 					});
-			});
+			},
+			function(callback) {
+				request(url)
+					.post('/admin/add')
+					.send(admin2)
+					.end(function (err, res) {
+						callback();
+					});
+			},
+			function(callback) {
+				request(url)
+					.post('/admin/login')
+					.set('Content-type', 'application/json')
+					.send(admin2)
+					.end(function (err, res) {
+
+						token2 = res.body.content.token;
+						authValue2 = 'Bearer ' + token2;
+						callback();
+					});
+			},
+			function(callback) {
+				request(url)
+					.post('/admin/add')
+					.send(admin3)
+					.end(function (err, res) {
+						callback();
+					});
+			},
+			function(callback) {
+				request(url)
+					.post('/admin/login')
+					.set('Content-type', 'application/json')
+					.send(admin3)
+					.end(function (err, res) {
+
+						token3 = res.body.content.token;
+						authValue3 = 'Bearer ' + token3;
+						callback();
+						done();
+					});
+			}
+		]);
 	});
 
 	it('1.2.1 should return a success response to indicate app successfully created', function(done) {
@@ -612,9 +547,8 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				var objectKey = Object.keys(res.body.content)[0];
 				appID = res.body.content.id;
-				(res.body.content[objectKey] == successResponse[1]).should.be.ok;
+				common.assertnDebug( { expected: successResponse[1].keys[0], result: res.body.content.keys[0] }, err, res);
 				done();
 			});
 	});
@@ -634,8 +568,7 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -649,13 +582,8 @@ describe('1.2.App', function() {
 			"keys": [ appKey ]
 		};
 
-		request(url)
-			.post('/admin/app/add')
-			.set('Content-type','application/json')
-			.set('Authorization', authValue )
-			.send(clientrequest)
-			.end(function(err, res) {
-
+		async.waterfall([
+			function(callback) {
 				request(url)
 					.post('/admin/app/add')
 					.set('Content-type','application/json')
@@ -663,20 +591,33 @@ describe('1.2.App', function() {
 					.send(clientrequest)
 					.end(function(err, res) {
 
-						request(url)
-							.get('/admin/apps')
-							.set('Content-type','application/json')
-							.set('Authorization', authValue )
-							.send()
-							.end(function(err, res) {
-
-								res.statusCode.should.be.equal(200);
-								res.body.status.should.be.equal(200);
-								(Object.keys(res.body.content).length >= 3).should.be.ok;
-								done();
-							});
+						callback();
 					});
-			});
+			},
+			function(callback) {
+				request(url)
+					.post('/admin/app/add')
+					.set('Content-type','application/json')
+					.set('Authorization', authValue )
+					.send(clientrequest)
+					.end(function(err, res) {
+
+						callback();
+					});
+			},
+			function(callback) {
+				request(url)
+					.get('/admin/apps')
+					.set('Content-type','application/json')
+					.set('Authorization', authValue )
+					.send()
+					.end(function(err, res) {
+
+						common.assertnDebug([{ expected: 200, result: res.body.status }, { expected: 200, result: res.statusCode }, { expected: true, result: (res.body.content).length >= 3 }], err, res);
+						done();
+					});
+			}
+		]);
 	});
 
 	it('1.2.4 should return a success response for updating an app', function(done) {
@@ -688,14 +629,23 @@ describe('1.2.App', function() {
 			"keys": [ appKey ]
 		};
 
-		request(url)
-			.post('/admin/app/add')
-			.set('Content-type','application/json')
-			.set('Authorization', authValue )
-			.send(clientrequest)
-			.end(function(err, res) {
+		var appID;
 
-				var appID = res.body.content.id;
+		async.waterfall([
+			function(callback) {
+				request(url)
+					.post('/admin/app/add')
+					.set('Content-type','application/json')
+					.set('Authorization', authValue )
+					.send(clientrequest)
+					.end(function(err, res) {
+
+						appID = res.body.content.id;
+						callback();
+					});
+			},
+			function(callback) {
+
 				var clientrequest2 = {
 					patches: [
 						{
@@ -714,10 +664,12 @@ describe('1.2.App', function() {
 					.send(clientrequest2)
 					.end(function(err, res) {
 
-						res.statusCode.should.be.equal(200);
+						common.assertnDebug( { expected: 200, result: res.statusCode }, err, res);
+						callback();
 						done();
 					});
-			});
+			}
+		]);
 	});
 
 	it('1.2.5 should return an error response for NOT updating an app because patches is not an array', function(done) {
@@ -736,8 +688,7 @@ describe('1.2.App', function() {
 			.send(clientrequest2)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('038');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '038', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -758,8 +709,7 @@ describe('1.2.App', function() {
 			.send(clientrequest2)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('038');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '038', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -776,8 +726,7 @@ describe('1.2.App', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('005');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '005', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -804,20 +753,7 @@ describe('1.2.App', function() {
 			.send(clientrequest2)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('011');
-					res.statusCode.should.be.equal(404);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '011', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -830,16 +766,22 @@ describe('1.2.App', function() {
 			"name": "test-app",
 			"keys": [ appKey ]
 		};
+		var appID;
 
-		request(url)
-			.post('/admin/app/add')
-			.set('Content-type','application/json')
-			.set('Authorization', authValue )
-			.send(clientrequest)
-			.end(function(err, res) {
+		async.waterfall([
+			function(callback) {
+				request(url)
+					.post('/admin/app/add')
+					.set('Content-type','application/json')
+					.set('Authorization', authValue )
+					.send(clientrequest)
+					.end(function(err, res) {
 
-				var appID = res.body.content.id;
-
+						appID = res.body.content.id;
+						callback();
+					});
+			},
+			function(callback) {
 				request(url)
 					.delete('/admin/app/remove')
 					.set('Content-type','application/json')
@@ -848,23 +790,12 @@ describe('1.2.App', function() {
 					.send()
 					.end(function(err, res) {
 
-						try{
-							res.statusCode.should.be.equal(200);
-							res.body.content.should.be.equal('App removed');
-						}
-						catch(assertError){
-							if(res){
-								console.log(res.body);
-							}
-							else{
-								console.log(err);
-							}
-							throw (assertError);
-						}
-
+						common.assertnDebug([{ expected: 'App removed', result: res.body.content }, { expected: 200, result: res.statusCode }], err, res);
+						callback();
 						done();
 					});
-			});
+			}
+		]);
 	});
 
 	it('1.2.10 should return an error response for trying to remove an app that does NOT exist', function(done) {
@@ -879,8 +810,7 @@ describe('1.2.App', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('011');
-				res.statusCode.should.be.equal(404);
+				common.assertnDebug([{ expected: '011', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -902,8 +832,7 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				if(res)
-					res.statusCode.should.be.equal(200);
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -926,9 +855,7 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				if(res)
-					res.body.code.should.be.equal('004');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -946,9 +873,7 @@ describe('1.2.App', function() {
 			.send()
 			.end(function(err, res) {
 
-				if(res)
-					res.body.code.should.be.equal('005');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '005', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -971,9 +896,7 @@ describe('1.2.App', function() {
 				.send(clientrequest)
 				.end(function(err, res) {
 
-					if(res)
-						res.body.code.should.be.equal('017');
-					res.statusCode.should.be.equal(409);
+					common.assertnDebug([{ expected: '017', result: res.body.code }, { expected: 409, result: res.statusCode }], err, res);
 					done();
 				});
 		}, 6*DELAY);
@@ -996,9 +919,7 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				if(res)
-					res.body.code.should.be.equal('011');
-				res.statusCode.should.be.equal(404);
+				common.assertnDebug([{ expected: '011', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1020,8 +941,7 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				if(res)
-					res.statusCode.should.be.equal(200);
+				common.assertnDebug( { expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -1041,20 +961,7 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('019');
-					res.statusCode.should.be.equal(404);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '019', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1073,19 +980,7 @@ describe('1.2.App', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('005');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
+				common.assertnDebug([{ expected: '005', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1108,19 +1003,7 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('004');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1142,19 +1025,7 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('012');
-					res.statusCode.should.be.equal(401);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
+				common.assertnDebug([{ expected: '012', result: res.body.code }, { expected: 401, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1176,20 +1047,7 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('018');
-					res.statusCode.should.be.equal(409);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '018', result: res.body.code }, { expected: 409, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1211,9 +1069,7 @@ describe('1.2.App', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				if(res)
-					res.body.code.should.be.equal('011');
-				res.statusCode.should.be.equal(404);
+				common.assertnDebug([{ expected: '011', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1238,22 +1094,8 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					var objectKey = Object.keys(res.body.content)[0];
-					contextID = res.body.content.id;
-					(res.body.content[objectKey].name == clientrequest.name).should.be.ok;
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				contextID = res.body.content.id;
+				common.assertnDebug([{ expected: clientrequest.name, result: res.body.content.name }, { expected: 200, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1268,20 +1110,7 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('005');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '005', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1302,19 +1131,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -1331,20 +1148,7 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('004');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1365,8 +1169,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('010');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '010', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1382,8 +1185,7 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('010');
-				res.statusCode.should.be.equal(400);
+				common.assertnDebug([{ expected: '010', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1411,19 +1213,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -1451,20 +1241,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('020');
-					res.statusCode.should.be.equal(404);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '020', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1486,20 +1263,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('038');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '038', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1516,20 +1280,7 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('005');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '005', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1551,20 +1302,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('038');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '038', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1592,20 +1330,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('004');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1633,20 +1358,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('012');
-					res.statusCode.should.be.equal(401);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '012', result: res.body.code }, { expected: 401, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1667,20 +1379,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('020');
-					res.statusCode.should.be.equal(404);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '020', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1701,21 +1400,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('020');
-					res.statusCode.should.be.equal(404);
-					res.body.message.should.be.equal("Context not found");
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '020', result: res.body.code }, { expected: 404, result: res.statusCode }, { expected: 'Context not found', result: res.body.message }], err, res);
 				done();
 			});
 	});
@@ -1732,20 +1417,7 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('004');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1762,20 +1434,7 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-					res.body.content.should.have.length(1);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: 1, result: res.body.content.length }, { expected: 200, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1792,20 +1451,7 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-					res.body.content.should.have.length(1);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: 1, result: res.body.content.length }, { expected: 200, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1822,8 +1468,7 @@ describe('1.3.Context', function() {
 			.send()
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('011');
-				res.statusCode.should.be.equal(404);
+				common.assertnDebug([{ expected: '011', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1844,20 +1489,7 @@ describe('1.3.Context', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-					res.body.content.should.be.equal('Context removed');
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: 'Context removed', result: res.body.content }, { expected: 200, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -1943,19 +1575,7 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -2018,8 +1638,7 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('011');
-				res.statusCode.should.be.equal(404);
+				common.assertnDebug([{ expected: '011', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2040,20 +1659,7 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('004');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2070,19 +1676,7 @@ describe('1.4.Schema', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -2099,19 +1693,7 @@ describe('1.4.Schema', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -2132,19 +1714,7 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -2165,8 +1735,7 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				res.body.code.should.be.equal('011');
-				res.statusCode.should.be.equal(404);
+				common.assertnDebug([{ expected: '011', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2187,20 +1756,7 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('022');
-					res.statusCode.should.be.equal(404);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '022', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2221,20 +1777,7 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('004');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2255,20 +1798,7 @@ describe('1.4.Schema', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('003');
-					res.statusCode.should.be.equal(404);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '003', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2324,19 +1854,7 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -2365,19 +1883,7 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -2396,20 +1902,7 @@ describe('1.5.User', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('005');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '005', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2434,20 +1927,7 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('038');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '038', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2471,20 +1951,7 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('038');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '038', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2493,44 +1960,37 @@ describe('1.5.User', function() {
 
 		this.timeout(100*DELAY);
 
-		request(url)
-			.post('/user/register')
-			.set('Content-type','application/json')
-			.set('X-BLGREQ-SIGN', appIDsha256 )
-			.set('X-BLGREQ-APPID', appID )
-			.set('X-BLGREQ-UDID', 'd244854a-ce93-4ba3-a1ef-c4041801ce28' )
-			.send(clientrequest)
-			.end(function(err, res) {
+		async.waterfall([
+			function(callback) {
+			request(url)
+				.post('/user/register')
+				.set('Content-type','application/json')
+				.set('X-BLGREQ-SIGN', appIDsha256 )
+				.set('X-BLGREQ-APPID', appID )
+				.set('X-BLGREQ-UDID', 'd244854a-ce93-4ba3-a1ef-c4041801ce28' )
+				.send(clientrequest)
+				.end(function(err, res) {
 
-				setTimeout(function() {
+						setTimeout(callback, 20*DELAY);
+					});
+			},
+			function(callback) {
+				request(url)
+					.delete('/admin/user/delete')
+					.set('Content-type','application/json')
+					.set('X-BLGREQ-SIGN', appIDsha256 )
+					.set('X-BLGREQ-APPID', appID )
+					.set('Authorization', authValue )
+					.set('X-BLGREQ-UDID', 'd244854a-ce93-4ba3-a1ef-c4041801ce28' )
+					.send(clientrequest)
+					.end(function(err, res) {
 
-					request(url)
-						.delete('/admin/user/delete')
-						.set('Content-type','application/json')
-						.set('X-BLGREQ-SIGN', appIDsha256 )
-						.set('X-BLGREQ-APPID', appID )
-						.set('Authorization', authValue )
-						.set('X-BLGREQ-UDID', 'd244854a-ce93-4ba3-a1ef-c4041801ce28' )
-						.send(clientrequest)
-						.end(function(err, res) {
-
-							try{
-								res.statusCode.should.be.equal(200);
-							}
-							catch(assertError){
-								if(res){
-									console.log(res.body);
-								}
-								else{
-									console.log(err);
-								}
-								throw (assertError);
-							}
-
-							done();
-						});
-				}, 20*DELAY);
-			});
+						common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
+						callback();
+						done();
+					});
+			}
+		]);
 	});
 
 	it('1.5.7 should return a success response indicating that a user has NOT been deleted, user does not belong to application', function(done) {
@@ -2544,14 +2004,21 @@ describe('1.5.User', function() {
 			name: "John Smith"
 		};
 
-		request(url)
-			.post('/user/register')
-			.set('Content-type','application/json')
-			.set('X-BLGREQ-SIGN', appIDsha256 )
-			.set('X-BLGREQ-APPID', appID )
-			.set('X-BLGREQ-UDID', 'd244854a-ce93-4ba3-a1ef-c4041801ce28' )
-			.send(clientrequest)
-			.end(function(err, res) {
+		async.waterfall([
+			function(callback) {
+				request(url)
+					.post('/user/register')
+					.set('Content-type','application/json')
+					.set('X-BLGREQ-SIGN', appIDsha256 )
+					.set('X-BLGREQ-APPID', appID )
+					.set('X-BLGREQ-UDID', 'd244854a-ce93-4ba3-a1ef-c4041801ce28' )
+					.send(clientrequest)
+					.end(function(err, res) {
+
+						setTimeout(callback, 20*DELAY);
+					});
+			},
+			function(callback) {
 
 				var userEmail = "user2@example.com";
 				var clientrequest = {
@@ -2560,36 +2027,22 @@ describe('1.5.User', function() {
 					"name": "John Smith"
 				};
 
-				setTimeout(function() {
+				request(url)
+					.delete('/admin/user/delete')
+					.set('Content-type','application/json')
+					.set('X-BLGREQ-SIGN', appIDsha256 )
+					.set('X-BLGREQ-APPID', appID )
+					.set('Authorization', authValue )
+					.set('X-BLGREQ-UDID', 'd244854a-ce93-4ba3-a1ef-c4041801ce28' )
+					.send(clientrequest)
+					.end(function(err, res) {
 
-					request(url)
-						.delete('/admin/user/delete')
-						.set('Content-type','application/json')
-						.set('X-BLGREQ-SIGN', appIDsha256 )
-						.set('X-BLGREQ-APPID', appID )
-						.set('Authorization', authValue )
-						.set('X-BLGREQ-UDID', 'd244854a-ce93-4ba3-a1ef-c4041801ce28' )
-						.send(clientrequest)
-						.end(function(err, res) {
-
-							try{
-								res.body.code.should.be.equal('023');
-								res.statusCode.should.be.equal(404);
-							}
-							catch(assertError){
-								if(res){
-									console.log(res.body);
-								}
-								else{
-									console.log(err);
-								}
-								throw (assertError);
-							}
-
-							done();
-						});
-				}, 20*DELAY);
-			});
+						common.assertnDebug([{ expected: '023', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
+						callback();
+						done();
+					});
+			}
+		]);
 	});
 
 	it('1.5.8 should return a error response indicating that a user has NOT been deleted because of missing email address', function(done) {
@@ -2611,20 +2064,7 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('004');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2650,19 +2090,7 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('011');
-					res.statusCode.should.be.equal(404);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-				}
-
+				common.assertnDebug([{ expected: '011', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2692,19 +2120,7 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('023');
-					res.statusCode.should.be.equal(404);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-				}
-
+				common.assertnDebug([{ expected: '023', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2733,19 +2149,7 @@ describe('1.5.User', function() {
 			.send(clientrequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('004');
-					res.statusCode.should.be.equal(400);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-				}
-
+				common.assertnDebug([{ expected: '004', result: res.body.code }, { expected: 400, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2764,18 +2168,7 @@ describe('1.5.User', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -2798,18 +2191,7 @@ describe('1.5.User', function() {
 			.send(clientRequest)
 			.end(function(err, res) {
 
-				try{
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -2828,19 +2210,7 @@ describe('1.5.User', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('011');
-					res.statusCode.should.be.equal(404);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-				}
-
+				common.assertnDebug([{ expected: '011', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2859,20 +2229,7 @@ describe('1.5.User', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.body.content.should.not.be.empty;
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: 1, result: res.body.content.length }, { expected: 200, result: res.statusCode }], err, res);
 				done();
 			});
 	});
@@ -2895,20 +2252,7 @@ describe('1.5.User', function() {
 			.send(clientRequest)
 			.end(function(err, res) {
 
-				try{
-					res.body.content.should.not.be.empty;
-					res.statusCode.should.be.equal(200);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug({ expected: 200, result: res.statusCode }, err, res);
 				done();
 			});
 	});
@@ -2927,20 +2271,7 @@ describe('1.5.User', function() {
 			.send()
 			.end(function(err, res) {
 
-				try{
-					res.body.code.should.be.equal('011');
-					res.statusCode.should.be.equal(404);
-				}
-				catch(assertError){
-					if(res){
-						console.log(res.body);
-					}
-					else{
-						console.log(err);
-					}
-					throw (assertError);
-				}
-
+				common.assertnDebug([{ expected: '011', result: res.body.code }, { expected: 404, result: res.statusCode }], err, res);
 				done();
 			});
 	});

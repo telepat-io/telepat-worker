@@ -1,0 +1,72 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var async = require('async');
+
+function containsString (substring, string) {
+
+	if (string && string.indexOf(substring) > -1) {
+		return string;
+	}
+}
+
+function deleteRequireCache (toDelete, cache){
+	var indexPath;
+
+	for(var k in cache)
+	{
+		indexPath = containsString(toDelete,k);
+		if(indexPath !== undefined)
+			break;
+	}
+
+	delete require.cache[indexPath];
+}
+
+process.argv[3] = "-t";
+
+process.argv[5] = "-i";
+process.argv[6] = "0";
+
+var workerTypes = [ 'aggregation', 'write', 'update_friends', 'android_transport', 'ios_transport', 'sockets_transport' ];
+
+async.series([
+	function(callback){
+		process.argv[4] = workerTypes[0];
+		var aggregation = require('../index');
+		setTimeout(callback,3000);
+	},
+	function(callback){
+		deleteRequireCache('worker/index.js',require.cache);
+		process.argv[4] = workerTypes[1];
+		var write = require('../index');
+		setTimeout(callback,1000);
+	},
+	function(callback){
+		deleteRequireCache('worker/index.js',require.cache);
+		process.argv[4] = workerTypes[2];
+		var update_friends = require('../index');
+		setTimeout(callback,3000);
+	},
+	function(callback){
+		deleteRequireCache('worker/index.js',require.cache);
+		process.argv[4] = workerTypes[3];
+		var android_transport = require('../index');
+		setTimeout(callback,3000);
+	},
+	function(callback){
+		deleteRequireCache('worker/index.js',require.cache);
+		process.argv[4] = workerTypes[4];
+		var ios_transport = require('../index');
+		setTimeout(callback,3000);
+	},
+	function(callback){
+		deleteRequireCache('worker/index.js',require.cache);
+		process.argv[4] = workerTypes[5];
+		process.env.TP_SCKT_PORT = 8080;
+		var sockets_transport = require('../index');
+		setTimeout(callback,3000);
+	}]);

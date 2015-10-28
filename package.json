@@ -4,6 +4,7 @@
   "description": "Telepat Workers are responsible for processing requests coming from the API and sending notifications to clients",
   "main": "index.js",
   "scripts": {
+	"start": "./bin/run",
 	"test": "istanbul cover _mocha -- test/worker.js -R spec"
   },
   "repository": {
