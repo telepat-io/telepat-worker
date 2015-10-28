@@ -1,3 +1,10 @@
+# 0.2.6
+
+* Fixed bugs
+* Notifications are sent to all application devices when contexts are created/updated/removed
+* Sockets transport listens to an event from the client to bind its device to the socket ID.
+* Workers use TelepatLogger instead of console.log
+
 # 0.2.5
 
 * All applications are loaded on boot up
