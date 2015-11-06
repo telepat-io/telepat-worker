@@ -1,3 +1,9 @@
+# 0.2.7
+
+* Fixed bug which caused the writer to not create items
+* Fixed bug where writer would hang on context create/update operations
+* Operations that have the **instant** flag in the delta will not be persisted to database
+
 # 0.2.6
 
 * Fixed bugs

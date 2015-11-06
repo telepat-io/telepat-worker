@@ -7,7 +7,6 @@ These workers then send messages to writers notifying them that they have work t
  the **aggregator** topic.
 * Writers: reads deltas and processes them (CRUD operations). They then send messages to transport workers with the processed
 deltas. This worker consumes messages from the **write** topic.
-* Trackers: *not implemented yet* (**track** topic)
 
 Then there are the client transport type workers. These type of workers are in charge of communicating with the client.
 They send messages containing changes to the database objects. Right now there are 3 transport workers: for Android (using gcm),
