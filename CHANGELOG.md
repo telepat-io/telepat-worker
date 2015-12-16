@@ -1,3 +1,7 @@
+# 0.2.8
+
+* Bugfix: `processMessage` Fixed write worker hang on end of main async function
+
 # 0.2.7
 
 * Fixed bug which caused the writer to not create items
