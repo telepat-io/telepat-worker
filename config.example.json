@@ -3,8 +3,7 @@
   "message_queue": "kafka",
   "logger": "console_logger",
   "ElasticSearch": {
-	"host": "10.0.0.1",
-	"port": 9200,
+	"hosts": ["hostname:9200"],
 	"index": "default"
   },
   "kafka": {
