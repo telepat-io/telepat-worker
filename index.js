@@ -90,9 +90,10 @@ async.series([
 		var messageQueueConfig = theWorker.config[theWorker.config.message_queue];
 
 		if (messageQueueConfig === undefined) {
-			messageQueueConfig = {broadcast: theWorker.broadcast};
+			messageQueueConfig = {broadcast: theWorker.broadcast, exclusive: theWorker.exclusive};
 		} else {
 			messageQueueConfig.broadcast = theWorker.broadcast;
+			messageQueueConfig.exclusive = theWorker.exclusive;
 		}
 
 		var messagingClient = new Models[theWorker.config.message_queue](messageQueueConfig, 'telepat-worker-'+workerType+'-'+workerIndex, workerType);
