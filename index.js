@@ -96,7 +96,7 @@ async.series([
 			messageQueueConfig.exclusive = theWorker.exclusive;
 		}
 
-		var messagingClient = new Models[theWorker.config.message_queue](messageQueueConfig, 'telepat-worker-'+workerType+'-'+workerIndex, workerType);
+		var messagingClient = new Models[theWorker.config.message_queue](messageQueueConfig, theWorker.name, workerType);
 		theWorker.setMessagingClient(messagingClient);
 
 		messagingClient.onReady(callback);
