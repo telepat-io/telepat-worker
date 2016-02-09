@@ -44,11 +44,15 @@ switch (workerType) {
 	}
 }
 
-if (Models[theWorker.config.logger]) {
-	Models.Application.logger = new Models[theWorker.config.logger]('telepat_'+theWorker.name,
-		theWorker.config[theWorker.config.logger]);
+if (theWorker.config.logger) {
+	theWorker.config.logger.name = theWorker.name;
+	Models.Application.logger = new Models.TelepatLogger(theWorker.config.logger);
 } else {
-	Models.Application.logger = new Models['console_logger']('telepat_'+theWorker.name);
+	Models.Application.logger = new Models.TelepatLogger({
+		type: 'Console',
+		name: theWorker.name,
+		settings: {level: 'info'}
+	});
 }
 
 if (!Models[theWorker.config.main_database]) {
