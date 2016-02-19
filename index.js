@@ -85,6 +85,20 @@ async.series([
 		});
 	},
 	function(callback) {
+		if (Models.Application.redisCacheClient)
+			Models.Application.redisCacheClient = null;
+
+		Models.Application.redisCacheClient = redis.createClient(theWorker.config.redisCache.port, theWorker.config.redisCache.host);
+		Models.Application.redisCacheClient.on('error', function(err) {
+			Models.Application.logger.error('Failed connecting to Redis Cache "'+theWorker.config.redisCache.host+'": '+
+				err.message+'. Retrying...');
+		});
+		Models.Application.redisCacheClient.on('ready', function() {
+			Models.Application.logger.info('Client connected to Redis Cache.');
+			callback();
+		});
+	},
+	function(callback) {
 		if (!Models[theWorker.config.message_queue]) {
 			Models.Application.logger.emergency('Unable to load "'+theWorker.config.message_queue+
 				'" messaging queue: not found. Aborting...');
