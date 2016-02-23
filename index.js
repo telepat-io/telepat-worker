@@ -90,10 +90,15 @@ async.series([
 		var messageQueueConfig = theWorker.config[theWorker.config.message_queue];
 
 		if (messageQueueConfig === undefined) {
-			messageQueueConfig = {broadcast: theWorker.broadcast, exclusive: theWorker.exclusive};
+			messageQueueConfig = {
+				broadcast: theWorker.broadcast,
+				broadcastChannel: theWorker.broadcastChannel,
+				exclusive: theWorker.exclusive
+			};
 		} else {
 			messageQueueConfig.broadcast = theWorker.broadcast;
 			messageQueueConfig.exclusive = theWorker.exclusive;
+			messageQueueConfig.broadcastChannel = theWorker.broadcastChannel;
 		}
 
 		var messagingClient = new Models[theWorker.config.message_queue](messageQueueConfig, theWorker.name, workerType);
