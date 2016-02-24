@@ -52,5 +52,5 @@
 	"socket.io": "^1.3.5",
 	"telepat-models": "telepat-io/telepat-models#develop",
 	"uuid": "^2.0.1"
-  }
+ }
 }
