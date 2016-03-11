@@ -1,3 +1,15 @@
+# 0.3.0
+
+* Renamed some fields on the sockets transport:
+	* **deviceId** to **device_id**
+* **bind_device** event on sockets transport is used to activate the
+device. After disconnecting the devices is deactivated.
+* Socket workers now have their own queue
+* Write workers send notifications to the socket worker which has the
+affected device client, instead of broadcasting
+* Fixed a bug were items were created multiple times under high
+concurency
+
 # 0.2.8
 
 * Bugfix: `processMessage` Fixed write worker hang on end of main async function
