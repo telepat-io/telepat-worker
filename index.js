@@ -44,6 +44,9 @@ switch (workerType) {
 	}
 }
 
+theWorker.config.subscribe_limit = theWorker.config.subscribe_limit || 64;
+theWorker.config.get_limit = theWorker.config.get_limit || 384;
+
 if (theWorker.config.logger) {
 	theWorker.config.logger.name = theWorker.name;
 	Models.Application.logger = new Models.TelepatLogger(theWorker.config.logger);
