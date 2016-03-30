@@ -32,6 +32,12 @@ switch (workerType) {
 
 		break;
 	}
+	case 'transport_manager': {
+		var TransportManagerWorker = require('./lib/transport_manager');
+		theWorker = new TransportManagerWorker(workerIndex);
+
+		break;
+	}
 	default: {
 		var workerTypeParts = workerType.split('_');
 		if (workerTypeParts[1] === 'transport') {
