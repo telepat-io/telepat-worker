@@ -51,6 +51,7 @@
 	"redis": "^0.12.1",
 	"socket.io": "1.4.4",
 	"telepat-models": "0.3.0",
+	"underscore": "1.8.3",
 	"uuid": "^2.0.1"
   }
 }
