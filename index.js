@@ -124,7 +124,7 @@ async.series([
 		}
 
 		var messagingClient = new Models[theWorker.config.message_queue](messageQueueConfig, theWorker.name, workerType);
-		theWorker.setMessagingClient(messagingClient);
+		theWorker.messagingClient = messagingClient;
 
 		messagingClient.onReady(callback);
 	}
