@@ -1,7 +1,7 @@
 var args = require('electron').argv();
 var async = require('async');
-colors = require('colors');
 var redis = require('redis');
+require('colors');
 
 var Models = require('telepat-models');
 
@@ -26,12 +26,6 @@ switch (workerType) {
 
 		break;
 	}
-	case 'update_friends': {
-		var UpdateFriendsWorker = require('./lib/update_friends_worker');
-		theWorker = new UpdateFriendsWorker(workerIndex);
-
-		break;
-	}
 	case 'transport_manager': {
 		var TransportManagerWorker = require('./lib/transport_manager');
 		theWorker = new TransportManagerWorker(workerIndex);
@@ -45,7 +39,7 @@ switch (workerType) {
 			theWorker = new ClientTransportWorker(workerIndex);
 		} else {
 			console.log('Invalid worker type "'+workerType+'"');
-			process.exit(-1);
+			process.exit(1);
 		}
 	}
 }
@@ -67,7 +61,7 @@ if (theWorker.config.logger) {
 if (!Models[theWorker.config.main_database]) {
 	Models.Application.logger.emergency('Unable to load "'+theWorker.config.main_database+
 		'" main database: not found. Aborting...');
-	process.exit(-1);
+	process.exit(2);
 }
 
 Models.Application.datasource = new Models.Datasource();
