@@ -1,3 +1,22 @@
+# 0.4.0
+
+* Big performance tweaks, the whole workers had been reworked
+* update_friends worker removed
+* New worker: transport_manager which is in charge of dispatching
+notifications to the right transport worker
+* Write worker no longer takes all deltas, but instead initially fetches
+1 delta then it doubles this limit everytime there are left in the redis
+Key
+* Android and IOS transport workers now send messages in smaller chunks
+in order to avoid going over the payload limit
+* iOS transport worker now fetches the certificates from the database
+* iOS transport now supports sending classic push notifications when a
+certain app model has been created
+* Sockets transport worker now only has 1 event: bind_device where the
+client must send a message in order to activate its subscriptions
+* Device token for volatile transports are now being removed when the
+client disconnects and re-added after reconnecting
+
 # 0.3.0
 
 * Renamed some fields on the sockets transport:
