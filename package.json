@@ -50,7 +50,7 @@
 	"object-sizeof": "^1.0.6",
 	"redis": "^0.12.1",
 	"socket.io": "1.4.4",
-	"telepat-models": "telepat-io/telepat-models#develop",
+	"telepat-models": "telepat-io/telepat-models#master",
 	"underscore": "1.8.3",
 	"uuid": "^2.0.1"
   }
