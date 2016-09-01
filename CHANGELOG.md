@@ -1,3 +1,8 @@
+# 0.4.1
+
+* Added support for SSL on sockets client transport worker
+* Bugfix: missing subscriptions array on notification payload
+
 # 0.4.0
 
 * Big performance tweaks, the whole workers had been reworked
