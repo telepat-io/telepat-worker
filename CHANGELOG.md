@@ -1,3 +1,8 @@
+# 0.4.3
+
+* Fix user updates
+* Implemented npm start/stop/restart commands
+
 # 0.4.2
 
 * Author validation checks in aggregation worker
