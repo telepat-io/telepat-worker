@@ -4,6 +4,9 @@
   "description": "Telepat Workers are responsible for processing requests coming from the API and sending notifications to clients",
   "main": "index.js",
   "scripts": {
+	"start": "./bin/startup.sh",
+	"stop": "./bin/stop.sh",
+	"restart": "./bin/restart.sh",
 	"test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
