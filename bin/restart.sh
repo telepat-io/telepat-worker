@@ -17,9 +17,9 @@ done
 
 if command_exists "forever" ; then
 	if [ $worker_id ]; then
-		forever stop ${worker_id}
+		forever restart ${worker_id}
 	else
-		forever stopall
+		forever restartall
 	fi
 else
 	echo "Unable to run script. Please install 'forever' npm package globally."
