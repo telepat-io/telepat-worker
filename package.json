@@ -49,6 +49,7 @@
 	"hiredis": "^0.4.0",
 	"mandrill-api": "^1.0.41",
 	"microtime-nodejs": "^1.0.0",
+	"node-gcm": "0.14.4",
 	"node-gcm-service": "^0.2.8",
 	"object-sizeof": "^1.0.6",
 	"redis": "^0.12.1",
