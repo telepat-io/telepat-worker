@@ -12,62 +12,77 @@ var workerIndex = args.params.i;
  * @type {Base_Worker}
  */
 var theWorker = null;
-
-switch (workerType) {
-	case 'aggregation':	{
-		var AggregationWorker = require('./lib/aggregation_worker');
-		theWorker = new AggregationWorker(workerIndex);
-
-		break;
-	}
-	case 'write': {
-		var WriterWorker = require('./lib/writer_worker');
-		theWorker = new WriterWorker(workerIndex);
-
-		break;
-	}
-	case 'transport_manager': {
-		var TransportManagerWorker = require('./lib/transport_manager');
-		theWorker = new TransportManagerWorker(workerIndex);
-
-		break;
-	}
-	default: {
-		var workerTypeParts = workerType.split('_');
-		if (workerTypeParts[1] === 'transport') {
-			var ClientTransportWorker = require('./lib/client_transport/'+workerTypeParts[0]);
-			theWorker = new ClientTransportWorker(workerIndex);
-		} else {
-			console.log('Invalid worker type "'+workerType+'"');
-			process.exit(1);
-		}
-	}
-}
-
-theWorker.config.subscribe_limit = theWorker.config.subscribe_limit || 64;
-theWorker.config.get_limit = theWorker.config.get_limit || 384;
-
-if (theWorker.config.logger) {
-	theWorker.config.logger.name = theWorker.name;
-	Models.Application.logger = new Models.TelepatLogger(theWorker.config.logger);
-} else {
-	Models.Application.logger = new Models.TelepatLogger({
-		type: 'Console',
-		name: theWorker.name,
-		settings: {level: 'info'}
-	});
-}
-
-if (!Models[theWorker.config.main_database]) {
-	Models.Application.logger.emergency('Unable to load "'+theWorker.config.main_database+
-		'" main database: not found. Aborting...');
-	process.exit(2);
-}
-
-Models.Application.datasource = new Models.Datasource();
-Models.Application.datasource.setMainDatabase(new Models[theWorker.config.main_database](theWorker.config[theWorker.config.main_database]));
+var configManager = null;
 
 async.series([
+	function(callback) {
+		configManager = new Models.ConfigurationManager('./config.spec.json', './config.json');
+		configManager.load(function(err) {
+			if (err) return callback(err);
+
+			var testResult = configManager.test();
+			callback(testResult !== true ? testResult : undefined);
+		});
+	},
+	function(callback) {
+		switch (workerType) {
+			case 'aggregation':	{
+				var AggregationWorker = require('./lib/aggregation_worker');
+				theWorker = new AggregationWorker(workerIndex, configManager.config);
+
+				break;
+			}
+			case 'write': {
+				var WriterWorker = require('./lib/writer_worker');
+				theWorker = new WriterWorker(workerIndex, configManager.config);
+
+				break;
+			}
+			case 'transport_manager': {
+				var TransportManagerWorker = require('./lib/transport_manager');
+				theWorker = new TransportManagerWorker(workerIndex, configManager.config);
+
+				break;
+			}
+			default: {
+				var workerTypeParts = workerType.split('_');
+				if (workerTypeParts[1] === 'transport') {
+					var ClientTransportWorker = require('./lib/client_transport/'+workerTypeParts[0]);
+					theWorker = new ClientTransportWorker(workerIndex, configManager.config);
+				} else {
+					console.log('Invalid worker type "'+workerType+'"');
+					process.exit(1);
+				}
+			}
+		}
+		callback();
+	},
+	function(callback) {
+		theWorker.config.subscribe_limit = theWorker.config.subscribe_limit || 64;
+		theWorker.config.get_limit = theWorker.config.get_limit || 384;
+
+		if (theWorker.config.logger) {
+			theWorker.config.logger.name = theWorker.name;
+			Models.Application.logger = new Models.TelepatLogger(theWorker.config.logger);
+		} else {
+			Models.Application.logger = new Models.TelepatLogger({
+				type: 'Console',
+				name: theWorker.name,
+				settings: {level: 'info'}
+			});
+		}
+
+		if (!Models[theWorker.config.main_database]) {
+			Models.Application.logger.emergency('Unable to load "'+theWorker.config.main_database+
+				'" main database: not found. Aborting...');
+			process.exit(2);
+		}
+
+		Models.Application.datasource = new Models.Datasource();
+		Models.Application.datasource.setMainDatabase(new Models[theWorker.config.main_database](theWorker.config[theWorker.config.main_database]));
+
+		callback();
+	},
 	function(callback) {
 		Models.Application.datasource.dataStorage.onReady(function() {
 			callback();
