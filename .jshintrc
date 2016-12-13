@@ -24,7 +24,6 @@
   "freeze": true,
   "funcscope": true,
   "globals": {
-	"app": false,
 	"it": false,
 	"describe": false
   },
