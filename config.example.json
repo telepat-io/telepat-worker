@@ -19,9 +19,9 @@
 	"host": "10.0.0.3",
 	"port": 6379
   },
-  "azure_servicebus": {
-	"connection_string": "azure serviceBus connection string",
-	"polling_interval": 50
+  "redisCache": {
+    "host": "10.0.0.62",
+    "port": 6379
   },
   "amqp": {
 	"host": "10.0.0.4",
