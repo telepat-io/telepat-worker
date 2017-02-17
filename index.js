@@ -137,6 +137,9 @@ async.series([
 
 		messagingClient.onReady(callback);
 	}
-], function() {
+], function(err) {
+	if (err) {
+		throw err;
+	}
 	theWorker.ready();
 });
