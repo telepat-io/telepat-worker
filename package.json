@@ -55,7 +55,7 @@
 		"object-sizeof": "^1.0.6",
 		"redis": "^0.12.1",
 		"socket.io": "1.4.4",
-		"telepat-models": "git+https://github.com/telepat-io/telepat-models.git#develop",
+		"telepat-models": "0.4.3",
 		"underscore": "1.8.3",
 		"uuid": "^2.0.1"
 	}
