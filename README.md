@@ -38,6 +38,12 @@ or by setting up environment variables (this method is the most convenient):
 * `TP_MSG_QUE`: Name of the messaging client you want to use. Should be the same as the exported variable in
 telepat-models
 * `TP_MAIN_DB`: Name of the main database which to use. Should be the same as the exported variable in telepat-models
+* `TP_SCKT_PORT`: Sockets transport worker listening port (defaults for 80 and 443 for SSL)
+* `TP_SCKT_SSL`: Wether to use SSL or not
+* `TP_SCKT_KEY_SSL`: Path to a file that contains a private key (SSL only)
+* `TP_SCKT_CERT_FILE`: Path to a file that contains a certificate (SSL only)
+* `TP_SCKT_KEY_PASSPHRASE`: Passphrase of the private key (SSL only)
+* `TP_SCKT_CA_CERT`: Path to a file that contains an intermediate certificate (SSL only)
 
 **Important**: You need to set up the other config variables specified in the `telepat-models` README file for resources
 that you're using.

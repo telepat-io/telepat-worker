@@ -139,13 +139,39 @@
 			]
 		},
 		{
-			"name": "subscribe_limit",
+			"name": "socket_port",
 			"type": "int",
+			"env_var": "TP_SCKT_PORT",
 			"optional": true
 		},
 		{
-			"name": "get_limit",
-			"type": "int",
+			"name": "use_ssl",
+			"type": "bool",
+			"env_var": "TP_SCKT_SSL",
+			"optional": true
+		},
+		{
+			"name": "ssl_key_file",
+			"type": "string",
+			"env_var": "TP_SCKT_KEY_SSL",
+			"optional": true
+		},
+		{
+			"name": "ssl_cert_file",
+			"type": "string",
+			"env_var": "TP_SCKT_CERT_SSL",
+			"optional": true
+		},
+		{
+			"name": "ssl_key_passphrase",
+			"type": "string",
+			"env_var": "TP_SCKT_KEY_PASSPHRASE",
+			"optional": true
+		},
+		{
+			"name": "ssl_ca_file",
+			"type": "string",
+			"env_var": "TP_SCKT_CA_CERT",
 			"optional": true
 		}
 	]
