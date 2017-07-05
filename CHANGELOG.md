@@ -1,3 +1,17 @@
+# 0.4.4
+
+* Finally added documentation for the sockets transport worker extra config vars
+* Single delta notifications with payload size greater than the gcm/apn limit will be stored on Amazon S3 and a link will be provided instead
+* Android transport worker sends notifications in bulk when the payload is the same
+* Replaced node-gcm-service with node-gcm
+* Transport manager will group notifications by subscription now for improved performance
+* Invalid devices should be removed now thanks to handling of the GCM response + the new APN HTTP/2 protocol response from Apple
+* Using the Configuration Manager implemented in telepat lib
+* BUGFIX: corrected logs file location using npm start
+* BUGFIX: npm start `--max-old-space-size` node argument fixed
+* BUGFIX: fix sockets worker crash when token is missing
+* BUGFIX: notifications with empty arrays should not be sent
+
 # 0.4.3
 
 * Fix user updates
