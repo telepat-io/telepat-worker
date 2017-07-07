@@ -2,7 +2,7 @@
 #
 # VERSION 0.1.2
 
-FROM node:0.12
+FROM node:4.8.3
 MAINTAINER Andrei Marinescu <andrei@telepat.io>
 
 RUN mkdir /app
