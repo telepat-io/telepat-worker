@@ -27,28 +27,33 @@ async.series([
 		switch (workerType) {
 			case 'aggregation': {
 				var AggregationWorker = require('./lib/aggregation_worker');
+
 				theWorker = new AggregationWorker(workerIndex, tlib.config);
 
 				break;
 			}
 			case 'write': {
 				var WriterWorker = require('./lib/writer_worker');
+
 				theWorker = new WriterWorker(workerIndex, tlib.config);
-				console.log(tlib.services.redisClient, tlib.services.redisCacheClient);
 				theWorker.redisClient = tlib.services.redisClient;
 				theWorker.redisCacheClient = tlib.services.redisCacheClient;
+
 				break;
 			}
 			case 'transport_manager': {
 				var TransportManagerWorker = require('./lib/transport_manager');
+
 				theWorker = new TransportManagerWorker(workerIndex, tlib.config);
 
 				break;
 			}
 			default: {
 				var workerTypeParts = workerType.split('_');
+				
 				if (workerTypeParts[1] === 'transport') {
 					var ClientTransportWorker = require('./lib/client_transport/' + workerTypeParts[0]);
+
 					theWorker = new ClientTransportWorker(workerIndex, tlib.config);
 				} else {
 					console.log('Invalid worker type "' + workerType + '"');
@@ -64,7 +69,5 @@ async.series([
 		throw err;
 	}
 	theWorker.messagingClient = tlib.services.messagingClient;
-	console.log(tlib.services.messagingClient);
-	console.log(theWorker);
 	theWorker.ready();
 });
