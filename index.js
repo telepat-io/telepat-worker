@@ -21,9 +21,9 @@ async.series([
 			exclusive: false,
 			type:  workerType
 		}; 
-		tlib.init(extraObj, 'telepat-worker', seriesCallback, workerType);
+		tlib.init(extraObj, seriesCallback, workerType);
 	},
-	(seriesCallback) => {
+	(seriesCallback) => {	
 		switch (workerType) {
 			case 'aggregation': {
 				var AggregationWorker = require('./lib/aggregation_worker');
@@ -68,6 +68,6 @@ async.series([
 	if (err) {
 		throw err;
 	}
-	theWorker.messagingClient = tlib.services.messagingClient;
+
 	theWorker.ready();
 });
